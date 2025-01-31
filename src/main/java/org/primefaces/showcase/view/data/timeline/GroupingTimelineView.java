@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,29 +23,35 @@
  */
 package org.primefaces.showcase.view.data.timeline;
 
-import org.primefaces.showcase.domain.Order;
-import org.primefaces.event.timeline.*;
-import org.primefaces.model.timeline.TimelineEvent;
-import org.primefaces.model.timeline.TimelineModel;
-
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.PrimeFaces;
 import org.primefaces.component.timeline.TimelineUpdater;
+import org.primefaces.event.timeline.TimelineModificationEvent;
+import org.primefaces.model.timeline.TimelineEvent;
 import org.primefaces.model.timeline.TimelineGroup;
+import org.primefaces.model.timeline.TimelineModel;
+import org.primefaces.showcase.domain.Order;
 
 @Named("groupingTimelineView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class GroupingTimelineView implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private TimelineModel<Order, Truck> model;
     private TimelineModel<Order, Truck> model2;
@@ -61,12 +67,12 @@ public class GroupingTimelineView implements Serializable {
 
     }
 
-    public TimelineModel<Order,Truck> newModelWithNumber(int n) {
-        TimelineModel<Order, Truck>  model = new TimelineModel<>();
+    public TimelineModel<Order, Truck> newModelWithNumber(int n) {
+        TimelineModel<Order, Truck> model = new TimelineModel<>();
 
         int orderNumber = 1;
         for (int j = 1; j <= n; j++) {
-            model.addGroup(new TimelineGroup<Truck>("id" + j, new Truck(String.valueOf(9+j))));
+            model.addGroup(new TimelineGroup<>("id" + j, new Truck(String.valueOf(9 + j))));
             LocalDateTime referenceDate = LocalDateTime.of(2015, Month.DECEMBER, 14, 8, 0);
 
             for (int i = 0; i < 6; i++) {
@@ -138,8 +144,8 @@ public class GroupingTimelineView implements Serializable {
         if (ordersToMerge != null && !ordersToMerge.isEmpty()) {
             model.merge(event, ordersToMerge, TimelineUpdater.getCurrentInstance(":form:timeline"));
         } else {
-            FacesMessage msg =
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Nothing to merge, please choose orders to be merged", null);
+            FacesMessage msg
+                    = new FacesMessage(FacesMessage.SEVERITY_INFO, "Nothing to merge, please choose orders to be merged", null);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
 
@@ -167,7 +173,11 @@ public class GroupingTimelineView implements Serializable {
         this.ordersToMerge = ordersToMerge;
     }
 
+    @RegisterForReflection
     public static class Truck implements java.io.Serializable {
+        @Serial
+        private static final long serialVersionUID = 1L;
+
         private final String code;
 
         public Truck(String code) {
@@ -178,4 +188,4 @@ public class GroupingTimelineView implements Serializable {
             return code;
         }
     }
-}  
+}

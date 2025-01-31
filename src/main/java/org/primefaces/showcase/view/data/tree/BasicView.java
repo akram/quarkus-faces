@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,29 +23,33 @@
  */
 package org.primefaces.showcase.view.data.tree;
 
-import javax.faces.view.ViewScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
+import java.io.Serializable;
+import java.util.Locale;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Named;
-import java.io.Serializable;
+import org.primefaces.util.LangUtils;
 
 @Named("treeBasicView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class BasicView implements Serializable {
-    
+
     private TreeNode root;
-    
+
     @PostConstruct
     public void init() {
-		root = new DefaultTreeNode("Files", null);
-		TreeNode node0 = new DefaultTreeNode("Documents", root);
-		TreeNode node1 = new DefaultTreeNode("Events", root);
+        root = new DefaultTreeNode("Files", null);
+        TreeNode node0 = new DefaultTreeNode("Documents", root);
+        TreeNode node1 = new DefaultTreeNode("Events", root);
         TreeNode node2 = new DefaultTreeNode("Movies", root);
-		
-		TreeNode node00 = new DefaultTreeNode("Work", node0);
-		TreeNode node01 = new DefaultTreeNode("Home", node0);
+
+        TreeNode node00 = new DefaultTreeNode("Work", node0);
+        TreeNode node01 = new DefaultTreeNode("Home", node0);
 
         node00.getChildren().add(new DefaultTreeNode("Expenses.doc"));
         node00.getChildren().add(new DefaultTreeNode("Resume.doc"));
@@ -64,9 +68,21 @@ public class BasicView implements Serializable {
         node21.getChildren().add(new DefaultTreeNode("Goodfellas"));
         node21.getChildren().add(new DefaultTreeNode("Untouchables"));
 
-	}
+    }
 
     public TreeNode getRoot() {
         return root;
     }
+
+    public boolean customFilter(TreeNode treeNode, Object filter, Locale locale) {
+        if (treeNode.getData() == null || filter == null) {
+            return true;
+        }
+        String filterText = filter.toString().trim().toLowerCase(locale);
+        if (LangUtils.isBlank(filterText)) {
+            return true;
+        }
+        return ((String) treeNode.getData()).toLowerCase(locale).contains(filterText);
+    }
+
 }

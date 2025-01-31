@@ -23,13 +23,15 @@
  */
 package org.primefaces.showcase.service;
 
-import org.primefaces.showcase.domain.Theme;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
+
+
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
+
+import org.primefaces.showcase.domain.Theme;
 
 @Named
 @ApplicationScoped

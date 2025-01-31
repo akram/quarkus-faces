@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,22 @@
  */
 package org.primefaces.showcase.view.button;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
+import java.util.concurrent.TimeUnit;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class ButtonView {
 
     private MenuModel model;
@@ -50,7 +53,6 @@ public class ButtonView {
                 .url("http://www.primefaces.org")
                 .icon("pi pi-home")
                 .build();
-
 
         DefaultSubMenu firstSubmenu = DefaultSubMenu.builder()
                 .label("Dynamic Submenu")
@@ -99,6 +101,21 @@ public class ButtonView {
 
     public void delete() {
         addMessage("Data deleted");
+    }
+
+    public String sleepAndSave() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        return save();
+    }
+
+    public void sleepAndUpdate() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        update();
+    }
+
+    public void sleepAndDelete() throws InterruptedException {
+        TimeUnit.SECONDS.sleep(1);
+        delete();
     }
 
     public void buttonAction() {

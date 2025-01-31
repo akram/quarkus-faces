@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,14 +27,20 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public class MenuItem implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
     private final String label;
     private String url;
     private List<MenuItem> menuItems;
     private String badge;
-    private String parentLabel;
+    private String badgeSeverity;
+    private MenuItem parent;
+    private String imageSrc;
 
     public MenuItem(String label, String url) {
         this.label = label;
@@ -47,9 +53,22 @@ public class MenuItem implements Serializable {
         this.badge = badge;
     }
 
+    public MenuItem(String label, String url, String badge, String imageSrc) {
+        this.label = label;
+        this.url = url;
+        this.badge = badge;
+        this.imageSrc = imageSrc;
+    }
+
     public MenuItem(String label, List<MenuItem> menuItems) {
         this.label = label;
         this.menuItems = menuItems;
+    }
+
+    public MenuItem(String label, List<MenuItem> menuItems, String badge) {
+        this.label = label;
+        this.menuItems = menuItems;
+        this.badge = badge;
     }
 
     public String getLabel() {
@@ -64,37 +83,55 @@ public class MenuItem implements Serializable {
         return badge;
     }
 
+    public String getBadgeSeverity() {
+        if (badgeSeverity != null) {
+            return badgeSeverity;
+        }
+        badgeSeverity = "primary";
+        if ("Deprecated".equalsIgnoreCase(badge)) {
+            badgeSeverity = "warning";
+        }
+        if ("New".equalsIgnoreCase(badge)) {
+            badgeSeverity = "success";
+        }
+        return badgeSeverity;
+    }
+
     public List<MenuItem> getMenuItems() {
         return menuItems;
     }
 
-    public String getParentLabel() {
-        return parentLabel;
+    public MenuItem getParent() {
+        return parent;
     }
 
-    public void setParentLabel(String parentLabel) {
-        this.parentLabel = parentLabel;
+    public void setParent(MenuItem parent) {
+        this.parent = parent;
+    }
+
+    public String getImageSrc() {
+        return imageSrc;
     }
 
     @Override
-	public int hashCode() {
-		return Objects.hash(label, url);
-	}
+    public int hashCode() {
+        return Objects.hash(label, url);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof MenuItem)) {
-			return false;
-		}
-		MenuItem other = (MenuItem) obj;
-		return Objects.equals(label, other.label) && Objects.equals(url, other.url);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof MenuItem)) {
+            return false;
+        }
+        MenuItem other = (MenuItem) obj;
+        return Objects.equals(label, other.label) && Objects.equals(url, other.url);
+    }
 
-	@Override
-	public String toString() {
-		return "MenuItem [label=" + label + ", url=" + url + "]";
-	}
+    @Override
+    public String toString() {
+        return "MenuItem [label=" + label + ", url=" + url + "]";
+    }
 }

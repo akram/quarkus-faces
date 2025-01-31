@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,25 +23,30 @@
  */
 package org.primefaces.showcase.view.input;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class RadioView {
-    
-    private String console;    
-    private String city; 
-    private String city2; 
-    private List<String> cities;  
+
+    private String line;
+    private String page;
+    private String city;
+    private String city2;
+    private List<String> cities;
     private String color;
-    
+    private String color2;
+
     @PostConstruct
     public void init() {
-        cities = new ArrayList<String>();
+        cities = new ArrayList<>();
         cities.add("Miami");
         cities.add("London");
         cities.add("Paris");
@@ -53,12 +58,20 @@ public class RadioView {
         cities.add("Amsterdam");
     }
 
-    public String getConsole() {
-        return console;
+    public String getLine() {
+        return line;
     }
 
-    public void setConsole(String console) {
-        this.console = console;
+    public void setLine(String line) {
+        this.line = line;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
     }
 
     public String getCity() {
@@ -76,13 +89,21 @@ public class RadioView {
     public void setCity2(String city2) {
         this.city2 = city2;
     }
-    
+
     public String getColor() {
         return color;
     }
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getColor2() {
+        return color2;
+    }
+
+    public void setColor2(String color2) {
+        this.color2 = color2;
     }
 
     public List<String> getCities() {

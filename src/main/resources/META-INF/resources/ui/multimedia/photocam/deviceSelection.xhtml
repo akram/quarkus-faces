@@ -1,8 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
                 template="/template/template.xhtml">
 
     <ui:define name="title">
@@ -15,7 +15,7 @@
     </ui:define>
 
     <ui:param name="documentationLink" value="/components/photocam"/>
-    <ui:param name="widgetLink" value="photocam-1"/>
+    <ui:param name="widgetLink" value="PhotoCam-1"/>
 
     <ui:define name="implementation">
         <div class="card">
@@ -23,7 +23,7 @@
                 <h:panelGrid columns="3" cellpadding="5">
                     <p:outputPanel id="photoCamPnl">
                         <p:photoCam widgetVar="pc" listener="#{photoCamView.oncapture}" update="photo"/>
-                        <select onchange="reload()">
+                        <select onchange="reload()" class="photoCamDevices">
                             <option value="">Select device</option>
                             <option value="user">"user" device</option>
                             <option value="environment">"environment" device</option>
@@ -38,13 +38,13 @@
             </h:form>
         </div>
 
-        <script type="text/javascript">
+        <script>
 
             //<![CDATA[
 
             function reload() {
                 var cam = PF('pc');
-                var deviceSelector = document.querySelector("select");
+                var deviceSelector = document.querySelector("select.photoCamDevices");
                 var device = deviceSelector.value;
                 cam.device = device;
                 cam.reload();

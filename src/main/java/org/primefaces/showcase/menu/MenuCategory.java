@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,15 +27,27 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class MenuCategory implements Serializable {
-   
-	private static final long serialVersionUID = 1L;
-	private final String label;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
+public class MenuCategory extends MenuItem implements Serializable {
+
+    private final String label;
     private List<MenuItem> menuItems;
+    private boolean custom;
 
     public MenuCategory(String label, List<MenuItem> menuItems) {
+        super(label, (String) null);
         this.label = label;
         this.menuItems = menuItems;
+    }
+
+    public MenuCategory(String label, List<MenuItem> menuItems, boolean custom) {
+        super(label, (String) null);
+        this.label = label;
+        this.menuItems = menuItems;
+        this.custom = custom;
     }
 
     public String getLabel() {
@@ -46,25 +58,29 @@ public class MenuCategory implements Serializable {
         return menuItems;
     }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(label);
-	}
+    public boolean getCustom() {
+        return custom;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof MenuCategory)) {
-			return false;
-		}
-		MenuCategory other = (MenuCategory) obj;
-		return Objects.equals(label, other.label);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(label);
+    }
 
-	@Override
-	public String toString() {
-		return "MenuCategory [label=" + label + "]";
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof MenuCategory)) {
+            return false;
+        }
+        MenuCategory other = (MenuCategory) obj;
+        return Objects.equals(label, other.label);
+    }
+
+    @Override
+    public String toString() {
+        return "MenuCategory [label=" + label + "]";
+    }
 }

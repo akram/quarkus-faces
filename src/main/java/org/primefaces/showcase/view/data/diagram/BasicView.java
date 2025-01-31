@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,12 @@
  */
 package org.primefaces.showcase.view.data.diagram;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
+import java.io.Serializable;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.model.diagram.Connection;
 import org.primefaces.model.diagram.DefaultDiagramModel;
 import org.primefaces.model.diagram.DiagramModel;
@@ -30,15 +36,11 @@ import org.primefaces.model.diagram.Element;
 import org.primefaces.model.diagram.endpoint.DotEndPoint;
 import org.primefaces.model.diagram.endpoint.EndPointAnchor;
 
-import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
-import java.io.Serializable;
-
 @Named("diagramBasicView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class BasicView implements Serializable {
-    
+
     private DefaultDiagramModel model;
 
     @PostConstruct
@@ -46,24 +48,24 @@ public class BasicView implements Serializable {
         model = new DefaultDiagramModel();
         model.setMaxConnections(-1);
         model.setConnectionsDetachable(false);
-        
+
         Element elementA = new Element("A", "20em", "6em");
         elementA.addEndPoint(new DotEndPoint(EndPointAnchor.BOTTOM));
-        
+
         Element elementB = new Element("B", "10em", "18em");
         elementB.addEndPoint(new DotEndPoint(EndPointAnchor.TOP));
-        
+
         Element elementC = new Element("C", "40em", "18em");
         elementC.addEndPoint(new DotEndPoint(EndPointAnchor.TOP));
-                        
+
         model.addElement(elementA);
         model.addElement(elementB);
         model.addElement(elementC);
-        
-        model.connect(new Connection(elementA.getEndPoints().get(0), elementB.getEndPoints().get(0)));        
+
+        model.connect(new Connection(elementA.getEndPoints().get(0), elementB.getEndPoints().get(0)));
         model.connect(new Connection(elementA.getEndPoints().get(0), elementC.getEndPoints().get(0)));
     }
-    
+
     public DiagramModel getModel() {
         return model;
     }

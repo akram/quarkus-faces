@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,23 +23,24 @@
  */
 package org.primefaces.showcase.view.data.tree;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.model.TreeNode;
 import org.primefaces.showcase.service.DocumentService;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-
 @Named("treeIconView")
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class IconView {
-    
-    private TreeNode root;
-    
+
     @Inject
     DocumentService service;
-    
+    private TreeNode root;
+
     @PostConstruct
     public void init() {
         root = service.createDocuments();

@@ -1,12 +1,12 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
                 template="/template/template.xhtml">
 
     <ui:define name="head">
-        <style type="text/css">
+        <style>
             .cheap {
                 background-color: #54a90a !important;
                 background-image: none !important;
@@ -16,7 +16,7 @@
     </ui:define>
 
     <ui:define name="title">
-        DataTable <span class="subitem">Color</span>
+        DataTable <span class="subitem">Row Color</span>
     </ui:define>
 
     <ui:define name="description">
@@ -24,7 +24,7 @@
     </ui:define>
 
     <ui:param name="documentationLink" value="/components/datatable"/>
-    <ui:param name="widgetLink" value="datatable-1"/>
+    <ui:param name="widgetLink" value="DataTable-1"/>
 
     <ui:define name="implementation">
         <div class="card">

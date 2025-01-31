@@ -23,14 +23,16 @@
  */
 package org.primefaces.showcase.view.ajax;
 
-import javax.faces.view.ViewScoped;
-
-import javax.inject.Named;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
 import java.io.Serializable;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @Named
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class CounterView implements Serializable {
-    
-    
+
+
 }

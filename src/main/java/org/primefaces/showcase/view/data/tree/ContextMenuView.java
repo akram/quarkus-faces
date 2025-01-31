@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,28 +23,28 @@
  */
 package org.primefaces.showcase.view.data.tree;
 
-import javax.faces.view.ViewScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.io.Serializable;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.model.TreeNode;
 import org.primefaces.showcase.service.DocumentService;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
-
 @Named("treeContextMenuView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class ContextMenuView implements Serializable {
-    
-     private TreeNode root;
-    
-    private TreeNode selectedNode;
-    
+
     @Inject
     DocumentService service;
-    
+    private TreeNode root;
+    private TreeNode selectedNode;
+
     @PostConstruct
     public void init() {
         root = service.createDocuments();
@@ -65,19 +65,19 @@ public class ContextMenuView implements Serializable {
     public void setService(DocumentService service) {
         this.service = service;
     }
-    
+
     public void displaySelectedSingle() {
-        if(selectedNode != null) {
+        if (selectedNode != null) {
             FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
-	}
-     
-    public void deleteNode() { 
+    }
+
+    public void deleteNode() {
         selectedNode.getChildren().clear();
         selectedNode.getParent().getChildren().remove(selectedNode);
         selectedNode.setParent(null);
-        
-        selectedNode = null; 
-    }  
+
+        selectedNode = null;
+    }
 }

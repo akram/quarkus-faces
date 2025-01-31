@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,32 +23,32 @@
  */
 package org.primefaces.showcase.view.data.datatable;
 
-import javax.faces.view.ViewScoped;
-import org.primefaces.showcase.domain.Product;
-import org.primefaces.showcase.service.ProductService;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.primefaces.showcase.domain.Product;
+import org.primefaces.showcase.service.ProductService;
+
 @Named("dtContextMenuView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class ContextMenuView implements Serializable {
-    
-    private List<Product> products;
-    
-    private Product selectedProduct;
-    
+
     @Inject
     ProductService service;
+    private List<Product> products;
+    private Product selectedProduct;
 
     @PostConstruct
     public void init() {
         products = service.getProducts(10);
     }
-    
+
     public List<Product> getProducts() {
         return products;
     }
@@ -64,9 +64,13 @@ public class ContextMenuView implements Serializable {
     public void setService(ProductService service) {
         this.service = service;
     }
-    
+
     public void deleteProduct() {
         products.remove(selectedProduct);
         selectedProduct = null;
+    }
+
+    public void viewProduct() {
+        // no-op
     }
 }

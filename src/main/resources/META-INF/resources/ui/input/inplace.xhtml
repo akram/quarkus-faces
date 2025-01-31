@@ -1,8 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
                 template="/template/template.xhtml">
                 
     <ui:define name="title">
@@ -15,7 +15,7 @@
     </ui:define>
 
     <ui:param name="documentationLink" value="/components/inplace"/>
-    <ui:param name="widgetLink" value="inplace-1"/>
+    <ui:param name="widgetLink" value="Inplace-1"/>
 
     <ui:define name="implementation">
         <div class="card">
@@ -46,13 +46,18 @@
                         Yes or No
                     </f:facet>
                     <f:facet name="input">
-                        <h:selectBooleanCheckbox/>
+                        <p:selectBooleanCheckbox/>
                     </f:facet>
                 </p:inplace>
 
                 <h5>Image</h5>
                 <p:inplace label="Show" effect="slide">
                     <p:graphicImage name="/demo/images/nature/nature3.jpg"/>
+                </p:inplace>
+
+                <h5>Password</h5>
+                <p:inplace>
+                    <p:password redisplay="true" value="#{inplaceView.password}"/>
                 </p:inplace>
             </h:form>
         </div>

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,66 +23,68 @@
  */
 package org.primefaces.showcase.view.multimedia;
 
-import org.primefaces.model.CroppedImage;
-
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
 import javax.imageio.stream.FileImageOutputStream;
-import javax.inject.Named;
 import java.io.File;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.primefaces.model.CroppedImage;
 
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class CropperView {
-    
+
     private CroppedImage croppedImage;
-	
-	private String newImageName;
 
-	public CroppedImage getCroppedImage() {
-		return croppedImage;
-	}
+    private String newImageName;
 
-	public void setCroppedImage(CroppedImage croppedImage) {
-		this.croppedImage = croppedImage;
-	}
+    public CroppedImage getCroppedImage() {
+        return croppedImage;
+    }
 
-	public void crop() {
-		if(croppedImage == null) {
-			return;
+    public void setCroppedImage(CroppedImage croppedImage) {
+        this.croppedImage = croppedImage;
+    }
+
+    public void crop() {
+        if (croppedImage == null) {
+            return;
         }
-		
-		setNewImageName(getRandomImageName());
-		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-		String newFileName = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "demo" +
-                    File.separator + "images" + File.separator + "crop" + File.separator + getNewImageName() + ".jpg";
-		
-		FileImageOutputStream imageOutput;
-		try {
-			imageOutput = new FileImageOutputStream(new File(newFileName));
-			imageOutput.write(croppedImage.getBytes(), 0, croppedImage.getBytes().length);
-			imageOutput.close();
-		} catch (Exception e) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Cropping failed."));
-			return;
-		}
-        
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Cropping finished."));
-	}
-	
-	private String getRandomImageName() {
-		int i = (int) (Math.random() * 100000);
-		
-		return String.valueOf(i);
-	}
-	
-	public String getNewImageName() {
-		return newImageName;
-	}
 
-	public void setNewImageName(String newImageName) {
-		this.newImageName = newImageName;
-	}
+        setNewImageName(getRandomImageName());
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        String newFileName = externalContext.getRealPath("") + File.separator + "resources" + File.separator + "demo"
+                + File.separator + "images" + File.separator + "crop" + File.separator + getNewImageName() + ".jpg";
+
+        FileImageOutputStream imageOutput;
+        try {
+            imageOutput = new FileImageOutputStream(new File(newFileName));
+            imageOutput.write(croppedImage.getBytes(), 0, croppedImage.getBytes().length);
+            imageOutput.close();
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Cropping failed."));
+            return;
+        }
+
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Success", "Cropping finished."));
+    }
+
+    private String getRandomImageName() {
+        int i = (int) (Math.random() * 100000);
+
+        return String.valueOf(i);
+    }
+
+    public String getNewImageName() {
+        return newImageName;
+    }
+
+    public void setNewImageName(String newImageName) {
+        this.newImageName = newImageName;
+    }
 }

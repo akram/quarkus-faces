@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,18 +23,21 @@
  */
 package org.primefaces.showcase.view.multimedia;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class ImagesView {
-    
+
     private List<String> images;
-    
+
     @PostConstruct
     public void init() {
         images = new ArrayList<String>();

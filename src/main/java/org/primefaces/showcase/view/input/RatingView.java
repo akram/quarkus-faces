@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,28 +23,36 @@
  */
 package org.primefaces.showcase.view.input;
 
-import org.primefaces.event.RateEvent;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
 
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.primefaces.event.RateEvent;
 
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class RatingView {
-    
-    private Integer rating1;   
-    private Integer rating2;   
+
+    private Integer rating1;
+    private Integer rating2;
     private Integer rating3 = 4;
-    
+    private Integer rating4;
+
     public void onrate(RateEvent<Integer> rateEvent) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Rate Event", "You rated:" + rateEvent.getRating());
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
+
     public void oncancel() {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancel Event", "Rate Reset");
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void onSubmit() {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Submitted", "You rated:" + rating4);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
@@ -70,5 +78,13 @@ public class RatingView {
 
     public void setRating3(Integer rating3) {
         this.rating3 = rating3;
+    }
+
+    public Integer getRating4() {
+        return rating4;
+    }
+
+    public void setRating4(Integer rating4) {
+        this.rating4 = rating4;
     }
 }

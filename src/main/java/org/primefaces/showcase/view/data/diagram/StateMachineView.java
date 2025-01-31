@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,11 @@
  */
 package org.primefaces.showcase.view.data.diagram;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.model.diagram.Connection;
 import org.primefaces.model.diagram.DefaultDiagramModel;
 import org.primefaces.model.diagram.DiagramModel;
@@ -34,52 +39,49 @@ import org.primefaces.model.diagram.endpoint.EndPointAnchor;
 import org.primefaces.model.diagram.overlay.ArrowOverlay;
 import org.primefaces.model.diagram.overlay.LabelOverlay;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-
 @Named("diagramStateMachineView")
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class StateMachineView {
-    
+
     private DefaultDiagramModel model;
 
     @PostConstruct
     public void init() {
         model = new DefaultDiagramModel();
         model.setMaxConnections(-1);
-        
+
         StateMachineConnector connector = new StateMachineConnector();
         connector.setOrientation(StateMachineConnector.Orientation.ANTICLOCKWISE);
         connector.setPaintStyle("{stroke:'#7D7463',strokeWidth:3}");
         model.setDefaultConnector(connector);
-        
+
         Element start = new Element(null, "15em", "5em");
         start.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM));
         start.setStyleClass("start-node");
-        
+
         Element idle = new Element("Idle", "10em", "20em");
         idle.addEndPoint(new BlankEndPoint(EndPointAnchor.TOP));
         idle.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM_RIGHT));
         idle.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM_LEFT));
-        
+
         Element turnedOn = new Element("TurnedOn", "10em", "35em");
         turnedOn.addEndPoint(new BlankEndPoint(EndPointAnchor.TOP));
         turnedOn.addEndPoint(new BlankEndPoint(EndPointAnchor.RIGHT));
         turnedOn.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM_RIGHT));
-                
+
         Element activity = new Element("Activity", "45em", "35em");
         activity.addEndPoint(new BlankEndPoint(EndPointAnchor.LEFT));
         activity.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM_LEFT));
         activity.addEndPoint(new BlankEndPoint(EndPointAnchor.TOP));
         activity.addEndPoint(new BlankEndPoint(EndPointAnchor.TOP_RIGHT));
         activity.addEndPoint(new BlankEndPoint(EndPointAnchor.TOP_LEFT));
-                                
+
         model.addElement(start);
         model.addElement(idle);
         model.addElement(turnedOn);
         model.addElement(activity);
-                
+
         model.connect(createConnection(start.getEndPoints().get(0), idle.getEndPoints().get(0), null));
         model.connect(createConnection(idle.getEndPoints().get(1), turnedOn.getEndPoints().get(0), "Turn On"));
         model.connect(createConnection(turnedOn.getEndPoints().get(0), idle.getEndPoints().get(2), "Turn Off"));
@@ -89,19 +91,19 @@ public class StateMachineView {
         model.connect(createConnection(activity.getEndPoints().get(3), activity.getEndPoints().get(3), "Run"));
         model.connect(createConnection(activity.getEndPoints().get(4), activity.getEndPoints().get(4), "Walk"));
     }
-    
+
     public DiagramModel getModel() {
         return model;
     }
-    
+
     private Connection createConnection(EndPoint from, EndPoint to, String label) {
         Connection conn = new Connection(from, to);
         conn.getOverlays().add(new ArrowOverlay(20, 20, 1, 1));
-        
-        if(label != null) {
+
+        if (label != null) {
             conn.getOverlays().add(new LabelOverlay(label, "flow-label", 0.5));
         }
-        
+
         return conn;
     }
 }

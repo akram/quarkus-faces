@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,21 @@
  */
 package org.primefaces.showcase.view.data.datatable;
 
-import org.primefaces.showcase.domain.Stats;
-import org.primefaces.showcase.domain.Team;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
-@Named("dtSubTableView")
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.primefaces.showcase.domain.Stats;
+import org.primefaces.showcase.domain.Team;
+
+@Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class SubTableView {
-    
+
     private List<Team> teams;
 
     @PostConstruct
@@ -49,7 +51,7 @@ public class SubTableView {
         lakers.getStats().add(new Stats("2009-2010", 48, 34));
         lakers.getStats().add(new Stats("2010-2011", 42, 42));
         teams.add(lakers);
-        
+
         Team celtics = new Team("Boston Celtics");
         celtics.getStats().add(new Stats("2005-2006", 46, 36));
         celtics.getStats().add(new Stats("2006-2007", 50, 32));
@@ -59,7 +61,7 @@ public class SubTableView {
         celtics.getStats().add(new Stats("2010-2011", 35, 47));
         teams.add(celtics);
     }
-    
+
     public List<Team> getTeams() {
         return teams;
     }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,92 +23,44 @@
  */
 package org.primefaces.showcase.view.multimedia;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
+import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.nio.file.Files;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.imageio.ImageIO;
-import javax.inject.Named;
-
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class GraphicImageView {
 
-    private StreamedContent graphicText;
-
-    private StreamedContent chart;
-
-    @PostConstruct
-    public void init() {
-        try {
-            graphicText = DefaultStreamedContent.builder()
-                        .contentType("image/png")
-                        .stream(() -> {
-                            try {
-                                BufferedImage bufferedImg = new BufferedImage(100, 25, BufferedImage.TYPE_INT_RGB);
-                                Graphics2D g2 = bufferedImg.createGraphics();
-                                g2.drawString("This is a text", 0, 10);
-                                ByteArrayOutputStream os = new ByteArrayOutputStream();
-                                ImageIO.write(bufferedImg, "png", os);
-                                return new ByteArrayInputStream(os.toByteArray());
-                            }
-                            catch (Exception e) {
-                                e.printStackTrace();
-                                return null;
-                            }
-                        })
-                        .build();
-
-            chart = DefaultStreamedContent.builder()
-                        .contentType("image/png")
-                        .stream(() -> {
-                            try {
-                                JFreeChart jfreechart = ChartFactory.createPieChart("Cities", createDataset(), true,
-                                            true, false);
-                                File chartFile = new File("dynamichart");
-                                ChartUtilities.saveChartAsPNG(chartFile, jfreechart, 375, 300);
-                                return Files.newInputStream(chartFile.toPath());
-                            }
-                            catch (Exception e) {
-                                e.printStackTrace();
-                                return null;
-                            }
-                        })
-                        .build();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public StreamedContent getGraphicText() {
-        return graphicText;
-    }
-
-    public StreamedContent getChart() {
-        return chart;
-    }
-
-    private PieDataset createDataset() {
-        DefaultPieDataset dataset = new DefaultPieDataset();
-        dataset.setValue("New York", Double.valueOf(45.0));
-        dataset.setValue("London", Double.valueOf(15.0));
-        dataset.setValue("Paris", Double.valueOf(25.2));
-        dataset.setValue("Berlin", Double.valueOf(14.8));
-
-        return dataset;
+        try {
+            return DefaultStreamedContent.builder()
+                    .contentType("image/png")
+                    .stream(() -> {
+                        try {
+                            BufferedImage bufferedImg = new BufferedImage(100, 25, BufferedImage.TYPE_INT_RGB);
+                            Graphics2D g2 = bufferedImg.createGraphics();
+                            g2.drawString("This is a text", 0, 10);
+                            ByteArrayOutputStream os = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImg, "png", os);
+                            return new ByteArrayInputStream(os.toByteArray());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return null;
+                        }
+                    })
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,28 @@
  */
 package org.primefaces.showcase.view.misc;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.PrimeFaces;
 import org.primefaces.showcase.domain.User;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class RequestContextView {
-  
+
     private User user;
-    
+
     @PostConstruct
     public void init() {
         user = new User();
-        
-        if(!FacesContext.getCurrentInstance().isPostback()) {
+
+        if (!FacesContext.getCurrentInstance().isPostback()) {
             PrimeFaces.current().executeScript("PrimeFaces.info('This message is added from backing bean.')");
         }
     }
@@ -55,20 +57,20 @@ public class RequestContextView {
         this.user = user;
     }
 
-	public void save() {
-	    PrimeFaces.current().ajax().addCallbackParam("saved", true);    //basic parameter
-	    PrimeFaces.current().ajax().addCallbackParam("user", user);     //pojo as json
-        
+    public void save() {
+        PrimeFaces.current().ajax().addCallbackParam("saved", true);    //basic parameter
+        PrimeFaces.current().ajax().addCallbackParam("user", user);     //pojo as json
+
         //execute javascript oncomplete
-	    PrimeFaces.current().executeScript("PrimeFaces.info('Hello from the Backing Bean');");
-        
+        PrimeFaces.current().executeScript("PrimeFaces.info('Hello from the Backing Bean');");
+
         //update panel
         PrimeFaces.current().ajax().update("form:panel");
-        
+
         //scroll to panel
         PrimeFaces.current().scrollTo("form:panel");
-        
+
         //add facesmessage
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Success", "Success"));
-	}
+    }
 }

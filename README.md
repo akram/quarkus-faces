@@ -1,56 +1,46 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Discord Chat](https://img.shields.io/badge/chat-discord-7289da)](https://discord.gg/gzKFYnpmCY)
+<div align="center">
+<img src="https://github.com/melloware/quarkus-faces/blob/main/src/site/QuarkusFaces.svg" width="100%"/>
+</div>
+<br>
 
-Quarkus Faces
-==========================
+[![License](https://img.shields.io/github/license/melloware/quarkus-faces?style=for-the-badge&logo=mit)](https://opensource.org/licenses/MIT)
+[![Discord Chat](https://img.shields.io/badge/discord-join_chat-blueviolet.svg?style=for-the-badge&logo=discord)](https://discord.gg/gzKFYnpmCY)
+[![Java CI with Maven](https://img.shields.io/github/actions/workflow/status/melloware/quarkus-faces/maven.yml?branch=main&logo=GitHub&style=for-the-badge)](https://github.com/melloware/quarkus-faces/actions/workflows/maven.yml)
+[![Quarkus](https://img.shields.io/badge/quarkus-power-blue?logo=quarkus&style=for-the-badge)](https://github.com/quarkusio/quarkus)
+![GitHub Sponsors](https://img.shields.io/github/sponsors/melloware?style=for-the-badge&color=gold)
 
-[![Quarkus Faces Logo](https://github.com/melloware/quarkus-faces/blob/main/src/site/QuarkusFaces.svg)](https://github.com/melloware/quarkus-faces)
+**If you like this project, please consider supporting me ❤️**
+
+[![GitHub Sponsor](https://img.shields.io/badge/GitHub-FFDD00?style=for-the-badge&logo=github&logoColor=black)](https://github.com/sponsors/melloware)
+[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.me/mellowareinc)
 
 ### Goals
-***
-The main goal was to take an out of the box JSF application ([PrimeFaces Showcase](https://github.com/primefaces/primefaces-showcase)) 
-and run it in both a Java EE Server and in [Quarkus](https://quarkus.io/). 
-Some addition goals:
-- See how much we can improve performance by incorporating various optimization tricks for JSF applications
-- See if Quarkus is a viable option for JSF and migrating to Docker containers
 
-### Environment
 ***
-- OpenJDK 11.0.10
-- JBoss Wildfly 18.0.1
-- Quarkus 2.6.2.Final
-- JSF Production Mode
-- Intel(R) Core(TM) i7-8750H CPU @2.21 GHz 16GB RAM
+The main goal was to take an out-of-the-box Faces (formerly JSF)
+application ([PrimeFaces Showcase](https://github.com/primefaces/primefaces/tree/master/primefaces-showcase))
+and get it running in [Quarkus](https://quarkus.io/) and deployed as a GraalVM Native executable or an UberJar single
+executable JAR.
+
+### Application
+
+***
+See [QuarkusFaces Showcase](https://quarkus-faces-melloware-8a6a34c1.koyeb.app/) running live in GraalVM on a free cloud
+hosting using 0.1 VCPU and 512MB RAM. It is an underpowered machine, but it gets the point across.
 
 ### Optimizations
+
 ***
+
 - Apache MyFaces (Quarkus) instead of Jakarta Mojarra (Wildfly)
-- PrimeFaces [MOVE_SCRIPTS_TO_BOTTOM](https://primefaces.github.io/primefaces/10_0_0/#/gettingstarted/configuration?id=configuration)
-- OmniFaces [GzipResponseFilter](https://showcase.omnifaces.org/filters/GzipResponseFilter)
+- PrimeFaces [MOVE_SCRIPTS_TO_BOTTOM](https://primefaces.github.io/primefaces/13_0_0/#/gettingstarted/configuration)
+- Quarkus Brotli
+  Compression [ quarkus.http.enable-compression=true](https://quarkus.io/guides/http-reference#http-compression)
 - OmniFaces [CombinedResourceHandler](https://showcase.omnifaces.org/resourcehandlers/CombinedResourceHandler)
-- PrimeFaces Extensions [CombinedResourceHandler Helper](https://github.com/primefaces-extensions/primefaces-extensions/issues/293) 
-- jQuery [Hide Page Until Complete](https://stackoverflow.com/questions/9550760/hide-page-until-everything-is-loaded-advanced/28129691#28129691)
+- PrimeFaces
+  Extensions [CombinedResourceHandler Helper](https://github.com/primefaces-extensions/primefaces-extensions/issues/293)
 
-### Metrics
-***
-The following client and server metrics were captured while hitting the exact same page [/datatable/crud.xhtml](https://www.primefaces.org/showcase/ui/data/datatable/crud.xhtml)
-Using `Incognito Mode` and pressing CTRL+F5 so it forced the browser to load all resources from the server with nothing cached.
-
-Metric                |  WildFly EE | Quarkus (unoptimized) | Quarkus (optimized) | Improvement |
-----------------------| ----------  | ----------------------| --------------------|-------------|
-Package Size          | 48.5 MB WAR | 98 MB                 | 98 MB               | ------      |
-Cold Startup          | 10.3 s      | 3.04 s                | 3.01 s              | 70.78%      |
-Memory Used           | 140 MB      | 39 MB                 | 39 MB               | 72.14%      |
-HTTP Requests         | 114         | 114                   | 89                  | 21.93%      |
-Resource Size         | 4.4 MB      | 4.4 MB                | 4.4 MB              | -----       |
-Transferred Size      | 4.4 MB      | 4.4 MB                | 2.9 MB              | 34.09%      |
-DOM Loaded            | 1150 ms     | 745 ms                | 668 ms              | 41.91%      |
-Lighthouse Score      | 59/100      | 61/100                | 98/100              | 66.10%      |
-First Paint           | 2.4 s       | 1.0 s                 | 0.6 s               | 75.00%      |
-Largest Paint         | 2.7 s       | 5.2 s                 | 1.3 s               | 51.85%      |
-Speed Index           | 2.4 s       | 1.8 s                 | 0.9 s               | 62.50%      |
-Time To Interactive   | 3.9 s       | 5.2 s                 | 1.3 s               | 66.67%      |
-
+jQuery [Hide Page Until Complete](https://stackoverflow.com/questions/9550760/hide-page-until-everything-is-loaded-advanced/28129691#28129691)
 
 ### Development
 
@@ -60,48 +50,54 @@ To run the example in Dev mode:
 ```
 git clone https://github.com/melloware/quarkus-faces
 cd quarkus-faces
-mvn clean compile quarkus:dev
+mvn quarkus:dev
 ```
 
-Then open your web browser to http://localhost:8080/
+Then open your web browser to http://localhost:8000/
 
-### Production
+### Production Uber-Jar
 
 ***
-To run the example in HotSpot Production mode (GraalVM native-image not supported):
+To run the example in HotSpot Production mode Uber-Jar:
 
 ```
 git clone https://github.com/melloware/quarkus-faces
 cd quarkus-faces
-mvn clean package
-java -jar target/quarkus-app/quarkus-run.jar
+mvn clean package -Dquarkus.package.jar.type=uber-jar
+java -jar target/quarkus-faces-runner.jar
 ```
 
-Then open your web browser to http://localhost:8080/
+Then open your web browser to http://localhost:8000/
 
 ### Docker JVM
 
 ***
 Builds a Docker image running as a standard JVM application.
+
 ```
 mvn clean package -Ddocker
-docker run -i --rm -p 8080:8080 melloware/quarkus-faces
+docker run -i --rm -p 8000:8000 melloware/quarkus-faces:latest
 ```
 
 ### Docker Native
 
 ***
-Builds a native Docker image running as a GraalVM (Mandrel) application. 
-> **⚠️**
-NOTE: not currently working because of limitations with some classloading.
+Builds a native Docker image running as a GraalVM (Mandrel) application.
+
 ```
-mvn clean package -Dnative
-docker build -f src/main/docker/Dockerfile.native -t melloware/quarkus-faces .
-docker run -i --rm -p 8080:8080 melloware/quarkus-faces
+mvn -Pnative-docker
+docker run -i --rm -p 8000:8000 melloware/quarkus-faces:${version}
 ```
 
 ### Known Issues
 
 ***
-We have a WIKI page where we are keeping track of [known issues](https://github.com/melloware/quarkus-faces/wiki/Quarkus-JSF-Known-Issues) while developing with Quarkus/MyFaces/PrimeFaces. Please feel free to contribute to that page if you find anything you think others should know!
+We have a WIKI page where we are keeping track
+of [known issues](https://github.com/melloware/quarkus-faces/wiki/Quarkus-Faces-Known-Issues) while developing with
+Quarkus/MyFaces/PrimeFaces. Please feel free to contribute to that page if you find anything you think others should
+know!
 
+## Quarkus Insights YouTube
+
+***
+[![Quarkus Faces YouTube](http://img.youtube.com/vi/DIN0I56-GR4/0.jpg)](http://www.youtube.com/watch?v=DIN0I56-GR4 "Quarkus Insights 165 What is new with Quarkus JSF")

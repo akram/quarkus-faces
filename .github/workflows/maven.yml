@@ -1,0 +1,39 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 21
+      uses: graalvm/setup-graalvm@v1
+      with:
+        distribution: 'graalvm'
+        java-version: '21'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        cache: 'maven'
+          
+    - name: Build with Maven
+      run: mvn -B clean verify -Dno-format
+
+    - name: Build with Maven (Native)
+      run: mvn -B verify -Dnative -Dnative.surefire.skip
+      if: ${{ startsWith(matrix.os, 'windows') == false}}

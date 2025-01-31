@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,18 +23,20 @@
  */
 package org.primefaces.showcase.view.file;
 
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
-import javax.enterprise.context.RequestScoped;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class FileDownloadView {
 
-    private StreamedContent file;
+    private final StreamedContent file;
 
     public FileDownloadView() {
         file = DefaultStreamedContent.builder()

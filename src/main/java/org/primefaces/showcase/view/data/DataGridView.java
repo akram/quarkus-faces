@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,29 +23,30 @@
  */
 package org.primefaces.showcase.view.data;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.io.Serializable;
+import java.util.List;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.PrimeFaces;
 import org.primefaces.showcase.domain.Product;
 import org.primefaces.showcase.service.ProductService;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
-import java.util.List;
-
 @Named
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class DataGridView implements Serializable {
-    
-    private List<Product> products;
-    private Product selectedProduct;
-    
+
     @Inject
     ProductService service;
-    
+    private List<Product> products;
+    private Product selectedProduct;
+
     @PostConstruct
     public void init() {
         products = service.getProducts(48);
@@ -66,7 +67,6 @@ public class DataGridView implements Serializable {
     public void setSelectedProduct(Product selectedProduct) {
         this.selectedProduct = selectedProduct;
     }
-
 
     public void clearMultiViewState() {
         FacesContext context = FacesContext.getCurrentInstance();

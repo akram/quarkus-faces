@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,14 @@
  */
 package org.primefaces.showcase.view.multimedia;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.ExternalContext;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
+import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -34,30 +42,23 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageOutputStream;
-import javax.inject.Named;
-
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.model.CroppedImage;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 @Named
 @SessionScoped
+@RegisterForReflection(serialization = true)
 public class DynamicCropper implements Serializable {
-    
+
     private final int width = 500;
     private final int height = 350;
     private int numberOfIterations;
 
     private CroppedImage croppedImage;
     private String newImageName;
-    
+
     @PostConstruct
     public void init() {
         this.numberOfIterations = 5;
@@ -79,15 +80,15 @@ public class DynamicCropper implements Serializable {
                 })
                 .build();
     }
-    
+
     public void crop() {
         if (this.croppedImage != null) {
-            String imageName = UUID.randomUUID().toString() + ".png";
+            String imageName = UUID.randomUUID() + ".png";
             setNewImageName(imageName);
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-            
+
             Path path = Paths.get(externalContext.getRealPath(""), "resources", "demo", "images", "crop", imageName);
-             
+
             FileImageOutputStream imageOutput;
             try {
                 imageOutput = new FileImageOutputStream(path.toFile());
@@ -98,13 +99,13 @@ public class DynamicCropper implements Serializable {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Cropping failed."));
             }
         }
-        
+
     }
 
     private BufferedImage mandelbrotSet(int width, int height, int maxIterations) throws IOException {
-        
+
         BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        
+
         final int[] colorBuffer = new int[maxIterations];
         Arrays.setAll(colorBuffer, i -> {
             float h = i / 256.0f;
@@ -121,26 +122,25 @@ public class DynamicCropper implements Serializable {
                 double x = .0, y = .0, rsq = .0;
                 int iteration = 0;
                 for (; rsq < 4 && iteration < maxIterations; ++iteration) {
-                    double newX = x*x - y*y + re;
-                    y = 2*x*y + im;
+                    double newX = x * x - y * y + re;
+                    y = 2 * x * y + im;
                     x = newX;
-                    rsq = x*x + y*y;
-                } 
+                    rsq = x * x + y * y;
+                }
                 if (iteration < maxIterations) {
                     result.setRGB(j, i, colorBuffer[iteration]);
-                }
-                else {
+                } else {
                     result.setRGB(j, i, 0);
                 }
             }
         }
         return result;
     }
-    
+
     public int getNumberOfIterations() {
         return numberOfIterations;
     }
-    
+
     public void setNumberOfIterations(int numberOfIterations) {
         this.numberOfIterations = numberOfIterations;
     }
@@ -148,11 +148,11 @@ public class DynamicCropper implements Serializable {
     public CroppedImage getCroppedImage() {
         return croppedImage;
     }
- 
+
     public void setCroppedImage(CroppedImage croppedImage) {
         this.croppedImage = croppedImage;
     }
-    
+
     public String getNewImageName() {
         return newImageName;
     }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,30 +23,32 @@
  */
 package org.primefaces.showcase.view.data;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.showcase.domain.Country;
 import org.primefaces.showcase.service.CountryService;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
-
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class OrderListView {
-    
+
     @Inject
     CountryService service;
-    
+
     private List<String> cities;
     private List<Country> countries;
-    
+
     @PostConstruct
     public void init() {
         //Cities
@@ -58,9 +60,9 @@ public class OrderListView {
         cities.add("Berlin");
         cities.add("Barcelona");
         cities.add("Rome");
-             
+
         //Countrys
-        countries = service.getCountries().subList(0,10);
+        countries = service.getCountries().subList(0, 10);
     }
 
     public CountryService getService() {
@@ -85,18 +87,18 @@ public class OrderListView {
 
     public void setCountries(List<Country> countries) {
         this.countries = countries;
-    }    
-    
+    }
+
     public void onSelect(SelectEvent<Country> event) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Selected", event.getObject().getName()));
     }
-    
+
     public void onUnselect(UnselectEvent<Country> event) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Unselected", event.getObject().getName()));
     }
-    
+
     public void onReorder() {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,10 @@
  */
 package org.primefaces.showcase.view.data.datatable;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,11 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.model.FilterMeta;
 import org.primefaces.model.MatchMode;
 import org.primefaces.showcase.domain.Customer;
@@ -45,8 +45,9 @@ import org.primefaces.util.LangUtils;
 
 @Named("dtFilterView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class FilterView implements Serializable {
-	
+
     @Inject
     CustomerService service;
 
@@ -112,8 +113,7 @@ public class FilterView implements Serializable {
     private int getInteger(String string) {
         try {
             return Integer.parseInt(string);
-        }
-        catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             return 0;
         }
     }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +25,22 @@ package org.primefaces.showcase.domain;
 
 import java.io.Serializable;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public class Stats implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-    
+
+    private static final long serialVersionUID = 1L;
+
     private String season;
-    
+
     private int win;
-    
+
     private int loss;
 
-    public Stats() {}
+    public Stats() {
+        // default constructor
+    }
 
     public Stats(String season, int win, int loss) {
         this.season = season;

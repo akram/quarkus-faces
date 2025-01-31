@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,17 +26,21 @@ package org.primefaces.showcase.domain;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public class Player {
-    
+
     private String name;
-    
-    private Map<Integer,Integer> goals;
-    
+
+    private final Map<Integer, Integer> goals;
+
     public Player() {
-        goals = new LinkedHashMap<Integer,Integer>();
+        goals = new LinkedHashMap<>();
     }
-    
-    public Player(String name, Map<Integer,Integer> goals) {
+
+    public Player(String name, Map<Integer, Integer> goals) {
         this.name = name;
         this.goals = goals;
     }
@@ -48,7 +52,7 @@ public class Player {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public int getGoals(int year) {
         return goals.get(year);
     }

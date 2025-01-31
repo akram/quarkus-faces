@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,45 +23,42 @@
  */
 package org.primefaces.showcase.view.input;
 
-import org.primefaces.showcase.domain.Country;
-import org.primefaces.showcase.service.CountryService;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.model.SelectItem;
-import javax.faces.model.SelectItemGroup;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.model.SelectItem;
+import jakarta.faces.model.SelectItemGroup;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.primefaces.showcase.domain.Country;
+import org.primefaces.showcase.service.CountryService;
+
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class SelectOneMenuView {
 
+    @Inject
+    CountryService service;
     private String selectedOption;
     private String rtl;
     private String hideNoSelectOption;
-
     private String countryGroup;
     private List<SelectItem> countriesGroup;
-
     private String city;
     private Map<String, String> cities = new HashMap<>();
-
     private Country country;
     private List<Country> countries;
-
     private String option;
     private List<String> options;
-
     private String longItemLabel;
     private String labeled;
-    
-    @Inject
-    CountryService service;
+    private String icon = "flag";
 
     @PostConstruct
     public void init() {
@@ -69,18 +66,17 @@ public class SelectOneMenuView {
         countriesGroup = new ArrayList<>();
 
         SelectItemGroup europeCountries = new SelectItemGroup("Europe Countries");
-        europeCountries.setSelectItems(new SelectItem[]{
-                new SelectItem("Germany", "Germany"),
+        europeCountries.setSelectItems(new SelectItem("Germany", "Germany"),
+                new SelectItem("Greece", "Greece"),
                 new SelectItem("Turkey", "Turkey"),
-                new SelectItem("Spain", "Spain")
-        });
+                new SelectItem("Slovakia", "Slovakia"),
+                new SelectItem("Slovenia", "Slovenia"),
+                new SelectItem("Spain", "Spain"));
 
         SelectItemGroup americaCountries = new SelectItemGroup("America Countries");
-        americaCountries.setSelectItems(new SelectItem[]{
-                new SelectItem("United States", "United States"),
+        americaCountries.setSelectItems(new SelectItem("United States", "United States"),
                 new SelectItem("Brazil", "Brazil"),
-                new SelectItem("Mexico", "Mexico")
-        });
+                new SelectItem("Mexico", "Mexico"));
 
         countriesGroup.add(europeCountries);
         countriesGroup.add(americaCountries);
@@ -115,17 +111,17 @@ public class SelectOneMenuView {
     public String getRtl() {
         return rtl;
     }
-    
+
+    public void setRtl(String rtl) {
+        this.rtl = rtl;
+    }
+
     public String getHideNoSelectOption() {
         return hideNoSelectOption;
     }
 
     public void setHideNoSelectOption(String hideNoSelectOption) {
         this.hideNoSelectOption = hideNoSelectOption;
-    }
-
-    public void setRtl(String rtl) {
-        this.rtl = rtl;
     }
 
     public String getCountryGroup() {
@@ -202,6 +198,14 @@ public class SelectOneMenuView {
 
     public void setLabeled(String labeled) {
         this.labeled = labeled;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public void setService(CountryService service) {

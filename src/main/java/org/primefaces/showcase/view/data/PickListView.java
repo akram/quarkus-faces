@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,16 @@
  */
 package org.primefaces.showcase.view.data;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.event.UnselectEvent;
@@ -30,31 +40,23 @@ import org.primefaces.model.DualListModel;
 import org.primefaces.showcase.domain.Country;
 import org.primefaces.showcase.service.CountryService;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
-
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class PickListView {
-    
+
     @Inject
     CountryService service;
-    
+
     private DualListModel<String> cities;
     private DualListModel<Country> countries;
-    
+
     @PostConstruct
     public void init() {
         //Cities
         List<String> citiesSource = new ArrayList<>();
         List<String> citiesTarget = new ArrayList<>();
-        
+
         citiesSource.add("San Francisco");
         citiesSource.add("London");
         citiesSource.add("Paris");
@@ -62,15 +64,15 @@ public class PickListView {
         citiesSource.add("Berlin");
         citiesSource.add("Barcelona");
         citiesSource.add("Rome");
-        
+
         cities = new DualListModel<>(citiesSource, citiesTarget);
-        
+
         //Countries
         List<Country> countriesSource = service.getCountries().subList(0, 10);
         List<Country> countriesTarget = new ArrayList<>();
-        
+
         countries = new DualListModel<>(countriesSource, countriesTarget);
-        
+
     }
 
     public DualListModel<String> getCities() {
@@ -96,31 +98,31 @@ public class PickListView {
     public void setCountries(DualListModel<Country> countries) {
         this.countries = countries;
     }
-    
+
     public void onTransfer(TransferEvent event) {
         StringBuilder builder = new StringBuilder();
-        for(Object item : event.getItems()) {
+        for (Object item : event.getItems()) {
             builder.append(((Country) item).getName()).append("<br />");
         }
-        
+
         FacesMessage msg = new FacesMessage();
         msg.setSeverity(FacesMessage.SEVERITY_INFO);
         msg.setSummary("Items Transferred");
         msg.setDetail(builder.toString());
-        
+
         FacesContext.getCurrentInstance().addMessage(null, msg);
-    }  
-    
+    }
+
     public void onSelect(SelectEvent<Country> event) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Selected", event.getObject().getName()));
     }
-    
+
     public void onUnselect(UnselectEvent<Country> event) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Unselected", event.getObject().getName()));
     }
-    
+
     public void onReorder() {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));

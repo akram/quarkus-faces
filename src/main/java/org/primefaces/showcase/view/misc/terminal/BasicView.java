@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2022 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,26 @@
  */
 package org.primefaces.showcase.view.misc.terminal;
 
-import javax.faces.view.ViewScoped;
-
-import javax.inject.Named;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.Date;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
 @Named("terminalBasicView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class BasicView implements Serializable {
 
     public String handleCommand(String command, String[] params) {
         if ("greet".equals(command)) {
             if (params.length > 0) {
                 return "Hello " + params[0];
-            }
-            else {
+            } else {
                 return "Hello Stranger";
             }
-        }
-        else if ("date".equals(command)) {
+        } else if ("date".equals(command)) {
             return new Date().toString();
         }
 

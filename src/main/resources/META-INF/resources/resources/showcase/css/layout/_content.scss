@@ -1,3 +1,5 @@
+@use "mixins";
+
 .layout-content {
     margin-left: 250px;
     padding-top: 70px;
@@ -26,12 +28,12 @@
                 }
 
                 a {
-                    @include navlink();
+                    @include mixins.navlink();
                 }
             }
 
             .documentation-link {
-                @include navlink();
+                @include mixins.navlink();
                 display: flex;
                 align-items: center;
                 margin: 1rem 0;
@@ -65,7 +67,7 @@
             }
 
             a {
-                @include navlink();
+                @include mixins.navlink();
             }
 
             .doc-tablewrapper {
@@ -91,14 +93,38 @@
                 border: 0 none;
     
                 .ui-tabs-nav {
-                    border-bottom: 1px solid var(--surface-d);
                     background-color: transparent;
+
+                    &:before {
+                        border-bottom: 1px solid var(--surface-d) !important;
+                    }
     
                     li.ui-tabs-header {
                         background-color: transparent;
+                        border-bottom-width: 1px;
 
                         a {
                             text-decoration: none;
+                        }
+
+                        &.ui-state-hover {
+                            border-color: transparent;
+                            border-bottom-color: var(--primary-color);
+                            border-radius: 0;
+
+                            a {
+                                color: var(--text-color);
+                            }
+                        }
+
+                        &.ui-state-active {
+                            border-color: transparent;
+                            border-bottom-color: var(--primary-color);
+                            border-radius: 0;
+
+                            a {
+                                color: var(--primary-color);
+                            }
                         }
                     }
                 }

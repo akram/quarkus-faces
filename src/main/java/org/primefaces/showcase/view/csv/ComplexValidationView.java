@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,16 @@
  */
 package org.primefaces.showcase.view.csv;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class ComplexValidationView {
 
     private String name;
@@ -39,6 +44,7 @@ public class ComplexValidationView {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -46,6 +52,7 @@ public class ComplexValidationView {
     public boolean isNameRequired() {
         return nameRequired;
     }
+
     public void setNameRequired(boolean checked) {
         this.nameRequired = checked;
     }
@@ -53,7 +60,23 @@ public class ComplexValidationView {
     public boolean isAcceptTermnsAndCondition() {
         return acceptTermnsAndCondition;
     }
+
     public void setAcceptTermnsAndCondition(boolean acceptTermnsAndCondition) {
         this.acceptTermnsAndCondition = acceptTermnsAndCondition;
+    }
+
+    public void doAjax() {
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ajax-action", "Hello from the server side!");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void doNonAjax() {
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Non-Ajax-action", "Hello from the server side!");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void doNonAjaxWithoutCsv() {
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Non-Ajax-action", "Hello from the server side, we skipped the CSV!");
+        FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 }

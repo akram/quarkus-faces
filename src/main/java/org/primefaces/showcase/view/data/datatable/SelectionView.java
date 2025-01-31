@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,24 +23,28 @@
  */
 package org.primefaces.showcase.view.data.datatable;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.io.Serializable;
+import java.util.List;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.showcase.domain.Product;
 import org.primefaces.showcase.service.ProductService;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
-import java.util.List;
-
 @Named("dtSelectionView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class SelectionView implements Serializable {
-    
+
+    @Inject
+    ProductService service;
     private List<Product> products1;
     private List<Product> products2;
     private List<Product> products3;
@@ -49,10 +53,7 @@ public class SelectionView implements Serializable {
     private List<Product> products6;
     private Product selectedProduct;
     private List<Product> selectedProducts;
-   
-    @Inject
-    ProductService service;
-    
+
     @PostConstruct
     public void init() {
         products1 = service.getProducts(10);
@@ -86,7 +87,7 @@ public class SelectionView implements Serializable {
     public List<Product> getProducts6() {
         return products6;
     }
-    
+
     public void setService(ProductService service) {
         this.service = service;
     }
@@ -106,7 +107,7 @@ public class SelectionView implements Serializable {
     public void setSelectedProducts(List<Product> selectedProducts) {
         this.selectedProducts = selectedProducts;
     }
-    
+
     public void onRowSelect(SelectEvent<Product> event) {
         FacesMessage msg = new FacesMessage("Product Selected", String.valueOf(event.getObject().getId()));
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -117,4 +118,3 @@ public class SelectionView implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 }
-

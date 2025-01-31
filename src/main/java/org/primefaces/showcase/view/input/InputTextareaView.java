@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,41 +23,41 @@
  */
 package org.primefaces.showcase.view.input;
 
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-
-import org.primefaces.event.SelectEvent;
-
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.primefaces.event.SelectEvent;
+
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class InputTextareaView {
-    
+
     public List<String> completeArea(String query) {
-        List<String> results = new ArrayList<String>();
-        
-        if(query.equals("PrimeFaces")) {
+        List<String> results = new ArrayList<>();
+
+        if ("PrimeFaces".equals(query)) {
             results.add("PrimeFaces Rocks!!!");
             results.add("PrimeFaces has 100+ components.");
             results.add("PrimeFaces is lightweight.");
             results.add("PrimeFaces is easy to use.");
             results.add("PrimeFaces is developed with passion!");
-        }
-        else {
-            for(int i = 0; i < 10; i++) {
+        } else {
+            for (int i = 0; i < 10; i++) {
                 results.add(query + i);
             }
         }
-        
+
         return results;
     }
 
     public void onSelect(SelectEvent<String> event) {
-    	FacesContext facesContext = FacesContext.getCurrentInstance();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "select", event.getObject()));
     }
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,18 @@
  */
 package org.primefaces.showcase.view.misc;
 
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
-import javax.inject.Named;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.AjaxBehaviorEvent;
+import jakarta.inject.Named;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.component.chip.Chip;
 
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class ChipView {
 
     public void onSelect(AjaxBehaviorEvent e) {

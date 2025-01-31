@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,9 @@ package org.primefaces.showcase.domain;
 
 import java.util.Random;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public enum CustomerStatus {
     QUALIFIED,
     UNQUALIFIED,
@@ -36,5 +39,9 @@ public enum CustomerStatus {
     public static CustomerStatus random() {
         Random random = new Random();
         return values()[random.nextInt(values().length)];
+    }
+
+    public String getStatusName() {
+        return name();
     }
 }

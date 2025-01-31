@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,29 +23,29 @@
  */
 package org.primefaces.showcase.view.data.datatable;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.io.Serializable;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.showcase.domain.Customer;
 import org.primefaces.showcase.service.CustomerService;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
-
 @Named("dtLazyView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class LazyView implements Serializable {
-
-    private LazyDataModel<Customer> lazyModel;
-
-    private Customer selectedCustomer;
 
     @Inject
     CustomerService service;
+    private LazyDataModel<Customer> lazyModel;
+    private Customer selectedCustomer;
 
     @PostConstruct
     public void init() {

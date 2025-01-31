@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,31 +23,31 @@
  */
 package org.primefaces.showcase.view.data.datatable;
 
-import javax.faces.view.ViewScoped;
-
-import org.primefaces.showcase.domain.Customer;
-import org.primefaces.showcase.service.CustomerService;
-
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.primefaces.showcase.domain.Customer;
+import org.primefaces.showcase.service.CustomerService;
+
 @Named("dtPaginatorView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class PaginatorView implements Serializable {
-    
-    private List<Customer> customers;
-    
+
     @Inject
     CustomerService service;
+    private List<Customer> customers;
 
     @PostConstruct
     public void init() {
         customers = service.getCustomers(50);
     }
-    
+
     public List<Customer> getCustomers() {
         return customers;
     }

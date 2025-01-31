@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.faces.context.FacesContext;
+
+import jakarta.faces.context.FacesContext;
 
 import org.apache.commons.collections4.ComparatorUtils;
 import org.primefaces.model.FilterMeta;
@@ -81,9 +82,7 @@ public class LazyCustomerDataModel extends LazyDataModel<Customer> {
     public List<Customer> load(int offset, int pageSize, Map<String, SortMeta> sortBy, Map<String, FilterMeta> filterBy) {
         // apply offset & filters
         List<Customer> customers = datasource.stream()
-                .skip(offset)
                 .filter(o -> filter(FacesContext.getCurrentInstance(), filterBy.values(), o))
-                .limit(pageSize)
                 .collect(Collectors.toList());
 
         // sort
@@ -95,7 +94,7 @@ public class LazyCustomerDataModel extends LazyDataModel<Customer> {
             customers.sort(cp);
         }
 
-        return customers;
+        return customers.subList(offset, Math.min(offset + pageSize, customers.size()));
     }
 
     private boolean filter(FacesContext context, Collection<FilterMeta> filterBy, Object o) {

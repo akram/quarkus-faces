@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,27 @@
  */
 package org.primefaces.showcase.view.data.treetable;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.io.Serializable;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.model.TreeNode;
 import org.primefaces.showcase.domain.Document;
 import org.primefaces.showcase.service.DocumentService;
 
-import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
-
 @Named("ttScrollableView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class ScrollableView implements Serializable {
-
-    private TreeNode<Document> root1;
-    private TreeNode<Document> root2;
-    private TreeNode<Document> root3;
 
     @Inject
     DocumentService service;
+    private TreeNode<Document> root1;
+    private TreeNode<Document> root2;
+    private TreeNode<Document> root3;
 
     @PostConstruct
     public void init() {

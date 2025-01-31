@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +23,25 @@
  */
 package org.primefaces.showcase.view.csv;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class CustomValidationView {
-    
+
     private String text;
-    
+
     @Email(message = "must be a valid email")
     private String email;
 
     public String getText() {
         return text;
     }
+
     public void setText(String text) {
         this.text = text;
     }
@@ -45,9 +49,9 @@ public class CustomValidationView {
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
-    
-    
+
 }

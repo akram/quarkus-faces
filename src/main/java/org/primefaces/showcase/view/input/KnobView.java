@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,27 +23,30 @@
  */
 package org.primefaces.showcase.view.input;
 
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
 import java.io.Serializable;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @Named
 @RequestScoped
-public class KnobView implements Serializable {  
-  
-    private int value = 50;  
-  
-    public int getValue() {  
-        return value;  
-    }  
-  
-    public void setValue(int value) {  
-        this.value = value;  
-    }  
-  
-    public void onChange(){  
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "You have selected: " + value, null));  
-    }  
+@RegisterForReflection(serialization = true)
+public class KnobView implements Serializable {
+
+    private int value = 50;
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public void onChange() {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "You have selected: " + value, null));
+    }
 }

@@ -1,8 +1,8 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
                 template="/template/template.xhtml">
 
     <ui:define name="title">
@@ -14,7 +14,7 @@
     </ui:define>
 
     <ui:param name="documentationLink" value="/components/datatable"/>
-    <ui:param name="widgetLink" value="datatable-1"/>
+    <ui:param name="widgetLink" value="DataTable-1"/>
 
     <ui:define name="implementation">
         <div class="card">
@@ -41,7 +41,7 @@
 
                 <p:contextMenu for="products">
                     <p:menuitem value="View" update="productDetail" icon="pi pi-search"
-                                oncomplete="PF('productDialog').show()"/>
+                                oncomplete="PF('productDialog').show()" actionListener="#{dtContextMenuView.viewProduct}"/>
                     <p:menuitem value="Delete" update="products" icon="pi pi-times"
                                 action="#{dtContextMenuView.deleteProduct}"/>
                 </p:contextMenu>
@@ -57,7 +57,7 @@
                                             <i class="pi pi-tag product-category-icon"/>
                                             <span class="product-category">#{dtContextMenuView.selectedProduct.category}</span>
                                         </div>
-                                        <span class="product-badge status-#{dtContextMenuView.selectedProduct.inventoryStatus.name().toLowerCase()}">#{dtContextMenuView.selectedProduct.inventoryStatus.text}</span>
+                                        <span class="product-badge status-#{dtContextMenuView.selectedProduct.inventoryStatus.statusName}">#{dtContextMenuView.selectedProduct.inventoryStatus.text}</span>
                                     </div>
                                     <div class="product-grid-item-content">
                                         <p:graphicImage

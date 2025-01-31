@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,65 +23,67 @@
  */
 package org.primefaces.showcase.view.data.timeline;
 
-import org.primefaces.model.timeline.TimelineEvent;
-import org.primefaces.model.timeline.TimelineModel;
-
-import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.primefaces.model.timeline.TimelineEvent;
+import org.primefaces.model.timeline.TimelineModel;
+
 @Named("limitTimelineRangeView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class LimitTimelineRangeView implements Serializable {
 
-	private TimelineModel<String, ?> model;
+    private TimelineModel<String, ?> model;
 
-	private LocalDateTime min;
-	private LocalDateTime max;
-	private long zoomMin;
-	private long zoomMax;
+    private LocalDateTime min;
+    private LocalDateTime max;
+    private long zoomMin;
+    private long zoomMax;
 
-	@PostConstruct
-	public void init() {
-		model = new TimelineModel<>();
+    @PostConstruct
+    public void init() {
+        model = new TimelineModel<>();
 
-		model.add(TimelineEvent.<String>builder().data("First").startDate(LocalDate.of(2015, 5, 25)).build());
-		model.add(TimelineEvent.<String>builder().data("Last").startDate(LocalDate.of(2015, 5, 26)).build());
+        model.add(TimelineEvent.<String>builder().data("First").startDate(LocalDate.of(2015, 5, 25)).build());
+        model.add(TimelineEvent.<String>builder().data("Last").startDate(LocalDate.of(2015, 5, 26)).build());
 
-		// lower limit of visible range
-		min = LocalDate.of(2015, 1,1).atStartOfDay();
+        // lower limit of visible range
+        min = LocalDate.of(2015, 1, 1).atStartOfDay();
 
-		// upper limit of visible range
-		max = LocalDate.of(2015, 12, 31).atStartOfDay();
+        // upper limit of visible range
+        max = LocalDate.of(2015, 12, 31).atStartOfDay();
 
-		// one day in milliseconds for zoomMin
-		zoomMin = 1000L * 60 * 60 * 24;
+        // one day in milliseconds for zoomMin
+        zoomMin = 1000L * 60 * 60 * 24;
 
-		// about three months in milliseconds for zoomMax
-		zoomMax = 1000L * 60 * 60 * 24 * 31 * 3;
-	}
+        // about three months in milliseconds for zoomMax
+        zoomMax = 1000L * 60 * 60 * 24 * 31 * 3;
+    }
 
-	public TimelineModel<String, ?> getModel() {
-		return model;
-	}
+    public TimelineModel<String, ?> getModel() {
+        return model;
+    }
 
-	public LocalDateTime getMin() {
-		return min;
-	}
+    public LocalDateTime getMin() {
+        return min;
+    }
 
-	public LocalDateTime getMax() {
-		return max;
-	}
+    public LocalDateTime getMax() {
+        return max;
+    }
 
-	public long getZoomMin() {
-		return zoomMin;
-	}
+    public long getZoomMin() {
+        return zoomMin;
+    }
 
-	public long getZoomMax() {
-		return zoomMax;
-	}
-    
+    public long getZoomMax() {
+        return zoomMax;
+    }
+
 }

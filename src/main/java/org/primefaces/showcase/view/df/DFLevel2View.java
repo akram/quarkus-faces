@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,24 +23,26 @@
  */
 package org.primefaces.showcase.view.df;
 
-import org.primefaces.PrimeFaces;
-import org.primefaces.event.SelectEvent;
-
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
+
 @Named("dfLevel2View")
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class DFLevel2View {
-    
+
     public void openLevel3() {
-        Map<String,Object> options = new HashMap<String, Object>();
+        Map<String, Object> options = new HashMap<String, Object>();
         options.put("modal", true);
         PrimeFaces.current().dialog().openDynamic("level3", options, null);
     }
-    
+
     public void onReturnFromLevel3(SelectEvent event) {
         //pass back to level 1
         PrimeFaces.current().dialog().closeDynamic(event.getObject());

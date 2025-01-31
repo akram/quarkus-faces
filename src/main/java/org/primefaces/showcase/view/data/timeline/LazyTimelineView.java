@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,15 @@
  */
 package org.primefaces.showcase.view.data.timeline;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.PrimitiveIterator;
 import java.util.Random;
 
-import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
-
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.component.timeline.TimelineUpdater;
 import org.primefaces.event.timeline.TimelineLazyLoadEvent;
 import org.primefaces.model.timeline.TimelineEvent;
@@ -39,6 +39,7 @@ import org.primefaces.model.timeline.TimelineModel;
 
 @Named
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class LazyTimelineView implements Serializable {
 
     private TimelineModel<String, ?> model;
@@ -98,10 +99,10 @@ public class LazyTimelineView implements Serializable {
             } else {
                 // event with start and end dates
                 model.add(TimelineEvent.<String>builder()
-                        .data("Event " + randomInts.nextInt())
-                        .startDate(curDate)
-                        .endDate(curDate.plusHours(18))
-                        .build(),
+                                .data("Event " + randomInts.nextInt())
+                                .startDate(curDate)
+                                .endDate(curDate.plusHours(18))
+                                .build(),
                         timelineUpdater);
             }
 
@@ -114,12 +115,12 @@ public class LazyTimelineView implements Serializable {
         model.clear();
     }
 
-    public void setPreloadFactor(float preloadFactor) {
-        this.preloadFactor = preloadFactor;
-    }
-
     public float getPreloadFactor() {
         return preloadFactor;
+    }
+
+    public void setPreloadFactor(float preloadFactor) {
+        this.preloadFactor = preloadFactor;
     }
 
     public long getZoomMax() {

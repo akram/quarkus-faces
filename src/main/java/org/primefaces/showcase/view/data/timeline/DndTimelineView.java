@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,33 +23,33 @@
  */
 package org.primefaces.showcase.view.data.timeline;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.AjaxBehaviorEvent;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.component.timeline.TimelineUpdater;
 import org.primefaces.event.timeline.TimelineDragDropEvent;
 import org.primefaces.model.timeline.TimelineEvent;
 import org.primefaces.model.timeline.TimelineModel;
 import org.primefaces.showcase.domain.Event;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @Named("dndTimelineView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class DndTimelineView implements Serializable {
 
+    private final List<Event> events = new ArrayList<>();
     private TimelineModel<Event, ?> model;
-
     private LocalDateTime start;
     private LocalDateTime end;
-    
-    private final List<Event> events = new ArrayList<>();
 
     @PostConstruct
     public void init() {

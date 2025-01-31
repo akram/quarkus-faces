@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,14 @@
  */
 package org.primefaces.showcase.view.data.dataexporter;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.component.export.Exporter;
 import org.primefaces.showcase.domain.Product;
@@ -38,15 +38,14 @@ import org.primefaces.showcase.service.ProductService;
 
 @Named
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class DataExporterView implements Serializable {
-    
-    private List<Product> products;
-    
-    private Exporter<DataTable> textExporter;
-        
+
     @Inject
     ProductService service;
-    
+    private List<Product> products;
+    private Exporter<DataTable> textExporter;
+
     @PostConstruct
     public void init() {
         products = service.getProducts(100);
@@ -68,6 +67,5 @@ public class DataExporterView implements Serializable {
     public void setTextExporter(Exporter<DataTable> textExporter) {
         this.textExporter = textExporter;
     }
-    
-    
+
 }

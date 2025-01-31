@@ -1,8 +1,8 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
+<ui:composition xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="primefaces"
+                xmlns="http://www.w3.org/1999/xhtml"
                 template="/template/template.xhtml">
 
     <ui:define name="title">
@@ -14,7 +14,7 @@
     </ui:define>
 
     <ui:param name="documentationLink" value="/components/datatable"/>
-    <ui:param name="widgetLink" value="datatable-1"/>
+    <ui:param name="widgetLink" value="DataTable-1"/>
 
     <ui:define name="implementation">
 
@@ -24,7 +24,7 @@
             <div class="card">
                 <h5>Row Editing</h5>
                 <p:dataTable id="products1" var="product" value="#{dtEditView.products1}" editable="true"
-                             style="margin-bottom:20px">
+                             style="margin-bottom:20px" cellNavigation="true">
 
                     <p:ajax event="rowEdit" listener="#{dtEditView.onRowEdit}" update=":form:msgs"/>
                     <p:ajax event="rowEditCancel" listener="#{dtEditView.onRowCancel}" update=":form:msgs"/>
@@ -35,7 +35,7 @@
                                 <h:outputText value="#{product.code}"/>
                             </f:facet>
                             <f:facet name="input">
-                                <p:inputText id="modelInput" value="#{product.code}" style="width:100%"/>
+                                <p:inputText value="#{product.code}" style="width:100%" required="true"/>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
@@ -53,21 +53,28 @@
 
                     <p:column headerText="Status">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{product.inventoryStatus}"/></f:facet>
+                            <f:facet name="output">
+                                <h:outputText value="#{product.inventoryStatus}"/>
+                            </f:facet>
                             <f:facet name="input">
-                                <h:selectOneMenu value="#{product.inventoryStatus}" style="width:100%">
+                                <p:selectOneMenu value="#{product.inventoryStatus}" style="width:100%">
                                     <f:selectItems value="#{dtEditView.inventoryStatusList}" var="status"
                                                    itemLabel="#{status.text}" itemValue="#{status}"/>
-                                </h:selectOneMenu>
+                                </p:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
 
                     <p:column headerText="Price">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="$#{product.price}"/></f:facet>
-                            <f:facet name="input"><p:inputText value="#{product.price}" style="width:100%"
-                                                               label="Price"/></f:facet>
+                            <f:facet name="output">
+                                <h:outputText value="#{product.price}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputNumber value="#{product.price}" style="width:100%" label="Price" symbol="$"/>
+                            </f:facet>
                         </p:cellEditor>
                     </p:column>
 
@@ -112,10 +119,10 @@
                                 <h:outputText value="#{product.inventoryStatus}"/>
                             </f:facet>
                             <f:facet name="input">
-                                <h:selectOneMenu value="#{product.inventoryStatus}" style="width:100%">
+                                <p:selectOneMenu value="#{product.inventoryStatus}" style="width:100%">
                                     <f:selectItems value="#{dtEditView.inventoryStatusList}" var="status"
                                                    itemLabel="#{status.text}" itemValue="#{status}"/>
-                                </h:selectOneMenu>
+                                </p:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
@@ -123,10 +130,12 @@
                     <p:column headerText="Price">
                         <p:cellEditor>
                             <f:facet name="output">
-                                <h:outputText value="$#{product.price}"/>
+                                <h:outputText value="#{product.price}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
                             </f:facet>
                             <f:facet name="input">
-                                <p:inputText value="#{product.price}" style="width:100%" label="Price"/>
+                                <p:inputNumber value="#{product.price}" style="width:100%" label="Price" symbol="$"/>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
@@ -135,7 +144,8 @@
 
             <div class="card">
                 <h5>Cell Editing with Double Click Event (dblclick)</h5>
-                <p:dataTable id="products3" var="product" value="#{dtEditView.products3}" editable="true" editMode="cell"
+                <p:dataTable id="products3" var="product" value="#{dtEditView.products3}" editable="true"
+                             editMode="cell"
                              widgetVar="cellCars2" editInitEvent="dblclick" style="margin-bottom:20px">
 
                     <p:ajax event="cellEdit" listener="#{dtEditView.onCellEdit}" update=":form:msgs"/>
@@ -168,10 +178,10 @@
                                 <h:outputText value="#{product.inventoryStatus}"/>
                             </f:facet>
                             <f:facet name="input">
-                                <h:selectOneMenu value="#{product.inventoryStatus}" style="width:100%">
+                                <p:selectOneMenu value="#{product.inventoryStatus}" style="width:100%">
                                     <f:selectItems value="#{dtEditView.inventoryStatusList}" var="status"
                                                    itemLabel="#{status.text}" itemValue="#{status}"/>
-                                </h:selectOneMenu>
+                                </p:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
@@ -179,10 +189,12 @@
                     <p:column headerText="Price">
                         <p:cellEditor>
                             <f:facet name="output">
-                                <h:outputText value="$#{product.price}"/>
+                                <h:outputText value="#{product.price}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
                             </f:facet>
                             <f:facet name="input">
-                                <p:inputText value="#{product.price}" style="width:100%" label="Price"/>
+                                <p:inputNumber value="#{product.price}" style="width:100%" label="Price" symbol="$"/>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>

@@ -23,8 +23,12 @@
  */
 package org.primefaces.showcase.util;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 /**
  * FileContentMarkerUtil
@@ -33,11 +37,13 @@ import java.util.Set;
  * @version $Revision$
  * @since 6.3
  */
+@RegisterForReflection
 public class FileContent implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1L;
 
-	private final String title;
+    private final String title;
 
     private final String value;
 
@@ -69,28 +75,16 @@ public class FileContent implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((title == null) ? 0 : title.hashCode());
-        return result;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FileContent that = (FileContent) o;
+        return Objects.equals(getTitle(), that.getTitle());
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        FileContent other = (FileContent) obj;
-        if (title == null) {
-            if (other.title != null)
-                return false;
-        } else if (!title.equals(other.title))
-            return false;
-        return true;
+    public int hashCode() {
+        return Objects.hashCode(getTitle());
     }
 
     @Override

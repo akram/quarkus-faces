@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,14 @@
  */
 package org.primefaces.showcase.view.data.diagram;
 
-import javax.faces.view.ViewScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
+import java.io.Serializable;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.diagram.ConnectEvent;
 import org.primefaces.event.diagram.ConnectionChangeEvent;
@@ -38,18 +45,13 @@ import org.primefaces.model.diagram.endpoint.EndPointAnchor;
 import org.primefaces.model.diagram.endpoint.RectangleEndPoint;
 import org.primefaces.model.diagram.overlay.ArrowOverlay;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-import java.io.Serializable;
-
 @Named("diagramEditableView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class EditableView implements Serializable {
-    
+
     private DefaultDiagramModel model;
-    
+
     private boolean suspendEvent;
 
     @PostConstruct
@@ -57,109 +59,109 @@ public class EditableView implements Serializable {
         model = new DefaultDiagramModel();
         model.setMaxConnections(-1);
         model.setContainment(false);
-        
+
         model.getDefaultConnectionOverlays().add(new ArrowOverlay(20, 20, 1, 1));
         StraightConnector connector = new StraightConnector();
         connector.setPaintStyle("{stroke:'#98AFC7', strokeWidth:3}");
         connector.setHoverPaintStyle("{stroke:'#5C738B'}");
         model.setDefaultConnector(connector);
-        
+
         Element computerA = new Element(new NetworkElement("Computer A", "computer-icon.png"), "10em", "6em");
         EndPoint endPointCA = createRectangleEndPoint(EndPointAnchor.BOTTOM);
         endPointCA.setSource(true);
         computerA.addEndPoint(endPointCA);
-        
+
         Element computerB = new Element(new NetworkElement("Computer B", "computer-icon.png"), "25em", "6em");
         EndPoint endPointCB = createRectangleEndPoint(EndPointAnchor.BOTTOM);
         endPointCB.setSource(true);
         computerB.addEndPoint(endPointCB);
-        
+
         Element computerC = new Element(new NetworkElement("Computer C", "computer-icon.png"), "40em", "6em");
         EndPoint endPointCC = createRectangleEndPoint(EndPointAnchor.BOTTOM);
         endPointCC.setSource(true);
         computerC.addEndPoint(endPointCC);
-        
+
         Element serverA = new Element(new NetworkElement("Server A", "server-icon.png"), "15em", "24em");
         EndPoint endPointSA = createDotEndPoint(EndPointAnchor.AUTO_DEFAULT);
         serverA.setDraggable(false);
         endPointSA.setTarget(true);
         serverA.addEndPoint(endPointSA);
-        
+
         Element serverB = new Element(new NetworkElement("Server B", "server-icon.png"), "35em", "24em");
         EndPoint endPointSB = createDotEndPoint(EndPointAnchor.AUTO_DEFAULT);
         serverB.setDraggable(false);
         endPointSB.setTarget(true);
         serverB.addEndPoint(endPointSB);
-                        
+
         model.addElement(computerA);
         model.addElement(computerB);
         model.addElement(computerC);
         model.addElement(serverA);
         model.addElement(serverB);
     }
-    
+
     public DiagramModel getModel() {
         return model;
     }
-    
+
     public void onConnect(ConnectEvent event) {
-        if(!suspendEvent) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Connected", 
-                    "From " + event.getSourceElement().getData()+ " To " + event.getTargetElement().getData());
-        
+        if (!suspendEvent) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Connected",
+                    "From " + event.getSourceElement().getData() + " To " + event.getTargetElement().getData());
+
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        
+
             PrimeFaces.current().ajax().update("form:msgs");
-        }
-        else {
+        } else {
             suspendEvent = false;
         }
     }
-    
+
     public void onDisconnect(DisconnectEvent event) {
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Disconnected", 
-                    "From " + event.getSourceElement().getData()+ " To " + event.getTargetElement().getData());
-        
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Disconnected",
+                "From " + event.getSourceElement().getData() + " To " + event.getTargetElement().getData());
+
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        
+
         PrimeFaces.current().ajax().update("form:msgs");
     }
-    
+
     public void onConnectionChange(ConnectionChangeEvent event) {
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Connection Changed", 
-                    "Original Source:" + event.getOriginalSourceElement().getData() + 
-                    ", New Source: " + event.getNewSourceElement().getData() + 
-                    ", Original Target: " + event.getOriginalTargetElement().getData() + 
-                    ", New Target: " + event.getNewTargetElement().getData());
-        
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Connection Changed",
+                "Original Source:" + event.getOriginalSourceElement().getData()
+                        + ", New Source: " + event.getNewSourceElement().getData()
+                        + ", Original Target: " + event.getOriginalTargetElement().getData()
+                        + ", New Target: " + event.getNewTargetElement().getData());
+
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        
+
         PrimeFaces.current().ajax().update("form:msgs");
         suspendEvent = true;
     }
-    
+
     private EndPoint createDotEndPoint(EndPointAnchor anchor) {
         DotEndPoint endPoint = new DotEndPoint(anchor);
         endPoint.setScope("network");
         endPoint.setTarget(true);
         endPoint.setStyle("{fill:'#98AFC7'}");
         endPoint.setHoverStyle("{fill:'#5C738B'}");
-        
+
         return endPoint;
     }
-    
+
     private EndPoint createRectangleEndPoint(EndPointAnchor anchor) {
         RectangleEndPoint endPoint = new RectangleEndPoint(anchor);
         endPoint.setScope("network");
         endPoint.setSource(true);
         endPoint.setStyle("{fill:'#98AFC7'}");
         endPoint.setHoverStyle("{fill:'#5C738B'}");
-        
+
         return endPoint;
     }
-    
+
+    @RegisterForReflection
     public class NetworkElement implements Serializable {
-        
+
         private String name;
         private String image;
 
@@ -191,6 +193,6 @@ public class EditableView implements Serializable {
         public String toString() {
             return name;
         }
-        
+
     }
 }

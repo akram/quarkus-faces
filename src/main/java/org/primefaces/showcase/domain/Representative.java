@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,14 +26,19 @@ package org.primefaces.showcase.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public class Representative implements Serializable, Comparable<Representative> {
-	
-	private static final long serialVersionUID = 1L;
 
-    public String name;
-    public String image;
+    private static final long serialVersionUID = 1L;
 
-    public Representative() {}
+    private String name;
+    private String image;
+
+    public Representative() {
+    }
 
     public Representative(String name, String image) {
         this.name = name;
@@ -58,11 +63,15 @@ public class Representative implements Serializable, Comparable<Representative> 
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Representative that = (Representative) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(image, that.image);
+        return Objects.equals(name, that.name)
+                && Objects.equals(image, that.image);
     }
 
     @Override

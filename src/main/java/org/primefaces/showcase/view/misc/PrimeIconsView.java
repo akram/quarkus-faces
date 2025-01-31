@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,43 +23,39 @@
  */
 package org.primefaces.showcase.view.misc;
 
-import org.primefaces.shaded.json.JSONArray;
-import org.primefaces.shaded.json.JSONException;
-import org.primefaces.shaded.json.JSONObject;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
-import java.io.*;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.Serializable;
 import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 @Named
 @ApplicationScoped
+@RegisterForReflection(serialization = true)
 public class PrimeIconsView implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    private List<Icon> iconsPrevious;
     private List<Icon> icons;
-    
-    @PostConstruct
-    public void init() {
-        icons = new ArrayList<>();
-        
-        String url = "https://raw.githubusercontent.com/primefaces/primeicons/4.1.0/selection.json";
-        try {
-            JSONObject json = readJsonFromUrl(url);
-            JSONArray iconsArray = json.getJSONArray("icons");
-            for(int i = 0; i < iconsArray.length(); i++) {
-                JSONObject properties = iconsArray.optJSONObject(i).getJSONObject("properties");
-                icons.add(new Icon(properties.getString("name"), properties.getInt("code")));
-            }
-        } catch (IOException | JSONException ex) {
-            Logger.getLogger(PrimeIconsView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     private static String readAll(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
@@ -70,15 +66,33 @@ public class PrimeIconsView implements Serializable {
         return sb.toString();
     }
 
-    public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
-        InputStream is = new URL(url).openStream();
+    @PostConstruct
+    public void init() {
+        iconsPrevious = getIcons("https://raw.githubusercontent.com/primefaces/primeicons/6.0.1/selection.json");
+        icons = getIcons("https://raw.githubusercontent.com/primefaces/primeicons/7.0.0/selection.json");
+        Collections.sort(icons, Comparator.comparing(Icon::getName));
+    }
+
+    private List<Icon> getIcons(String url) {
+        List<Icon> result = new ArrayList<>();
         try {
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+            JSONObject json = readJsonFromUrl(url);
+            JSONArray iconsArray = json.getJSONArray("icons");
+            for (int i = 0; i < iconsArray.length(); i++) {
+                JSONObject properties = iconsArray.optJSONObject(i).getJSONObject("properties");
+                result.add(new Icon(properties.getString("name"), properties.getInt("code")));
+            }
+        } catch (IOException | JSONException ex) {
+            Logger.getLogger(PrimeIconsView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
+    public JSONObject readJsonFromUrl(String url) throws IOException, JSONException {
+        try (InputStream is = new URL(url).openStream()) {
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String jsonText = readAll(rd);
-            JSONObject json = new JSONObject(jsonText);
-            return json;
-        } finally {
-            is.close();
+            return new JSONObject(jsonText);
         }
     }
 
@@ -86,15 +100,16 @@ public class PrimeIconsView implements Serializable {
         return icons;
     }
 
-    public void setIcons(List<Icon> icons) {
-        this.icons = icons;
+    public boolean isNew(Icon icon) {
+        return !iconsPrevious.contains(icon);
     }
-    
+
+    @RegisterForReflection
     public class Icon {
-        
+
         private String name;
         private int key;
-        
+
         public Icon(String name, int key) {
             this.name = name;
             this.key = key;
@@ -114,6 +129,26 @@ public class PrimeIconsView implements Serializable {
 
         public void setKey(int key) {
             this.key = key;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(key);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final Icon other = (Icon) obj;
+            return this.key == other.key;
         }
     }
 }

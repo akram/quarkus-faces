@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +26,19 @@ package org.primefaces.showcase.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public class Mail implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-    
-    public String from;
-    public String subject;
-    public String body;
-    public Date date;
-    
-    public Mail() {}
+
+    private String from;
+    private String subject;
+    private String body;
+    private Date date;
+
+    public Mail() {
+    }
 
     public Mail(String from, String subject, String body, Date date) {
         this.from = from;

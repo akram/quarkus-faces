@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,21 @@
  */
 package org.primefaces.showcase.view.misc;
 
-import org.primefaces.PrimeFaces;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Named;
 
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.primefaces.PrimeFaces;
 
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class ResetInputView {
-    
+
     private String text1;
-    
+
     private String text2;
 
     public String getText1() {
@@ -53,19 +55,19 @@ public class ResetInputView {
     public void setText2(String text2) {
         this.text2 = text2;
     }
-    
+
     public void save() {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Data Saved"));
     }
-    
+
     public void reset() {
         PrimeFaces.current().resetInputs("form:panel");
     }
-    
+
     public void resetFail() {
         this.text1 = null;
         this.text2 = null;
-        
+
         FacesMessage msg = new FacesMessage("Model reset, but it won't work properly.");
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }

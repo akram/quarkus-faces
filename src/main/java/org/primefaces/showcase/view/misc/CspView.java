@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,22 +23,24 @@
  */
 package org.primefaces.showcase.view.misc;
 
-import javax.faces.view.ViewScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
+import java.io.Serializable;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.PrimeFaces;
 import org.primefaces.context.PrimeApplicationContext;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-import java.io.Serializable;
-
 @Named
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class CspView implements Serializable {
-    
-    private boolean cspEnabled;
+
+    private final boolean cspEnabled;
     private String userSuppliedInput;
-    
+
     public CspView() {
         cspEnabled = PrimeApplicationContext.getCurrentInstance(FacesContext.getCurrentInstance()).getConfig().isCsp();
         userSuppliedInput = "<b>Huhu</b><script>window.cspScriptExecuted=true;alert('XSS');</script>";
@@ -46,7 +48,7 @@ public class CspView implements Serializable {
 
     public void check() {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage("Success",  "PASS"));
+        context.addMessage(null, new FacesMessage("Success", "PASS"));
     }
 
     public String getUserSuppliedInput() {
@@ -60,7 +62,7 @@ public class CspView implements Serializable {
     public boolean isCspEnabled() {
         return cspEnabled;
     }
-    
+
     public void executeScript() {
         PrimeFaces.current().executeScript("alert('PASS');");
     }

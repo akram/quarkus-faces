@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,28 @@
  */
 package org.primefaces.showcase.view.data.timeline;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.component.timeline.TimelineUpdater;
 import org.primefaces.event.timeline.TimelineAddEvent;
 import org.primefaces.event.timeline.TimelineModificationEvent;
 import org.primefaces.model.timeline.TimelineEvent;
 import org.primefaces.model.timeline.TimelineModel;
-
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
 import org.primefaces.showcase.domain.Booking;
 import org.primefaces.showcase.domain.RoomCategory;
 
 @Named("editServerTimelineView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class EditServerTimelineView implements Serializable {
 
     private TimelineModel<Booking, ?> model;

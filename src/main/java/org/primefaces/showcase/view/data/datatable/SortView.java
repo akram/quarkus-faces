@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,30 +23,31 @@
  */
 package org.primefaces.showcase.view.data.datatable;
 
-import javax.faces.view.ViewScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 import org.primefaces.showcase.domain.Product;
 import org.primefaces.showcase.service.ProductService;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 @Named("dtSortView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class SortView implements Serializable {
 
+    @Inject
+    ProductService service;
     private List<Product> products1;
     private List<Product> products2;
     private List<Product> products3;
     private List<SortMeta> sortBy;
-
-    @Inject
-    ProductService service;
 
     @PostConstruct
     public void init() {

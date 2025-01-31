@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,10 @@ package org.primefaces.showcase.domain;
 
 import java.util.Objects;
 
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+
+@RegisterForReflection
 public class Place {
 
     private String name;
@@ -63,12 +67,16 @@ public class Place {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Place place = (Place) o;
-        return Objects.equals(name, place.name) &&
-                Objects.equals(code, place.code) &&
-                Objects.equals(status, place.status);
+        return Objects.equals(name, place.name)
+                && Objects.equals(code, place.code)
+                && Objects.equals(status, place.status);
     }
 
     @Override

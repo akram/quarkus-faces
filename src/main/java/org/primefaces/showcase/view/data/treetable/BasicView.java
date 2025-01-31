@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,36 +23,37 @@
  */
 package org.primefaces.showcase.view.data.treetable;
 
-import javax.faces.view.ViewScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import org.primefaces.model.SortMeta;
+import org.primefaces.model.SortOrder;
 import org.primefaces.model.TreeNode;
 import org.primefaces.showcase.domain.Document;
 import org.primefaces.showcase.service.DocumentService;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import org.primefaces.model.SortMeta;
-import org.primefaces.model.SortOrder;
-
 @Named("ttBasicView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class BasicView implements Serializable {
-    
-    private TreeNode root;
-    private List<SortMeta> sortBy;
-    
-    private Document selectedDocument;
-        
+
     @Inject
     DocumentService service;
-    
+    private TreeNode<Document> root;
+    private List<SortMeta> sortBy;
+    private Document selectedDocument;
+    private List<Document> multipleSelectedDocuments;
+
     @PostConstruct
     public void init() {
         root = service.createDocuments();
-        
+
         sortBy = new ArrayList<>();
         sortBy.add(SortMeta.builder()
                 .field("name")
@@ -60,7 +61,7 @@ public class BasicView implements Serializable {
                 .build());
     }
 
-    public TreeNode getRoot() {
+    public TreeNode<Document> getRoot() {
         return root;
     }
 
@@ -78,5 +79,13 @@ public class BasicView implements Serializable {
 
     public List<SortMeta> getSortBy() {
         return sortBy;
+    }
+
+    public List<Document> getMultipleSelectedDocuments() {
+        return multipleSelectedDocuments;
+    }
+
+    public void setMultipleSelectedDocuments(List<Document> multipleSelectedDocuments) {
+        this.multipleSelectedDocuments = multipleSelectedDocuments;
     }
 }

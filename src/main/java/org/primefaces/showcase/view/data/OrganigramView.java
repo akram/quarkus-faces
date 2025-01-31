@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,14 @@
  */
 package org.primefaces.showcase.view.data;
 
-import javax.faces.view.ViewScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
+import java.io.Serializable;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.component.organigram.OrganigramHelper;
 import org.primefaces.event.organigram.OrganigramNodeCollapseEvent;
 import org.primefaces.event.organigram.OrganigramNodeDragDropEvent;
@@ -32,14 +39,9 @@ import org.primefaces.event.organigram.OrganigramNodeSelectEvent;
 import org.primefaces.model.DefaultOrganigramNode;
 import org.primefaces.model.OrganigramNode;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-import java.io.Serializable;
-
 @Named
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class OrganigramView implements Serializable {
 
     private OrganigramNode rootNode;
@@ -99,7 +101,8 @@ public class OrganigramView implements Serializable {
 
     public void nodeDragDropListener(OrganigramNodeDragDropEvent event) {
         FacesMessage message = new FacesMessage();
-        message.setSummary("Node '" + event.getOrganigramNode().getData() + "' moved from " + event.getSourceOrganigramNode().getData() + " to '" + event.getTargetOrganigramNode().getData() + "'");
+        message.setSummary("Node '" + event.getOrganigramNode().getData()
+                + "' moved from " + event.getSourceOrganigramNode().getData() + " to '" + event.getTargetOrganigramNode().getData() + "'");
         message.setSeverity(FacesMessage.SEVERITY_INFO);
 
         FacesContext.getCurrentInstance().addMessage(null, message);

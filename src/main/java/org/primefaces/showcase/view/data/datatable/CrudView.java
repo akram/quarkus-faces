@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,36 +23,38 @@
  */
 package org.primefaces.showcase.view.data.datatable;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.PrimeFaces;
 import org.primefaces.showcase.domain.Product;
 import org.primefaces.showcase.service.ProductService;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
-import java.util.List;
-import java.util.UUID;
-
 @Named
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class CrudView implements Serializable {
 
-    private List<Product> products;
-
-    private Product selectedProduct;
-
-    private List<Product> selectedProducts;
-
+    private static final long serialVersionUID = 1L;
     @Inject
     ProductService productService;
+    private List<Product> products;
+    private Product selectedProduct;
+    private List<Product> selectedProducts;
 
     @PostConstruct
     public void init() {
         this.products = this.productService.getClonedProducts(100);
+        this.selectedProducts = new ArrayList<Product>();
     }
 
     public List<Product> getProducts() {
@@ -84,8 +86,7 @@ public class CrudView implements Serializable {
             this.selectedProduct.setCode(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9));
             this.products.add(this.selectedProduct);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Added"));
-        }
-        else {
+        } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Updated"));
         }
 
@@ -95,6 +96,7 @@ public class CrudView implements Serializable {
 
     public void deleteProduct() {
         this.products.remove(this.selectedProduct);
+        this.selectedProducts.remove(this.selectedProduct);
         this.selectedProduct = null;
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Removed"));
         PrimeFaces.current().ajax().update("form:messages", "form:dt-products");

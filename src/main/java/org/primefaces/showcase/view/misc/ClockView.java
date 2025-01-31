@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,18 +23,20 @@
  */
 package org.primefaces.showcase.view.misc;
 
-import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
 import java.io.Serializable;
-import java.time.*;
+import java.time.LocalDateTime;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 @Named
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class ClockView implements Serializable {
 
     private LocalDateTime dateTime;
-
 
     @PostConstruct
     public void init() {

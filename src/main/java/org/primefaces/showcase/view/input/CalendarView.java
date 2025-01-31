@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,21 +23,27 @@
  */
 package org.primefaces.showcase.view.input;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
+import jakarta.validation.constraints.Future;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.SelectEvent;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
-import javax.validation.constraints.Future;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 @Named
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class CalendarView implements Serializable {
 
     private Date date;
@@ -60,10 +66,13 @@ public class CalendarView implements Serializable {
     private Date date14;
     private Date date15;
     private Date date16;
+    private Date date17;
     private Date dateTimeDe;
+    private Date dateTimeMillis;
     private List<Date> multi;
     private List<Date> range;
     private List<Date> invalidDates;
+    private List<Date> validDates;
     private List<Integer> invalidDays;
     private Date minDate;
     private Date maxDate;
@@ -71,7 +80,6 @@ public class CalendarView implements Serializable {
     private Date maxTime;
     private Date minDateTime;
     private Date maxDateTime;
-
 
     @PostConstruct
     public void init() {
@@ -83,8 +91,15 @@ public class CalendarView implements Serializable {
             invalidDates.add(new Date(invalidDates.get(i).getTime() + oneDay));
         }
 
+        validDates = new ArrayList<>();
+        validDates.add(today);
+        for (int i = 0; i < 5; i++) {
+            validDates.add(new Date(validDates.get(i).getTime() + oneDay));
+        }
+
         invalidDays = new ArrayList<>();
-        invalidDays.add(0); /* the first day of week is disabled */
+        invalidDays.add(0);
+        /* the first day of week is disabled */
         invalidDays.add(3);
 
         minDate = new Date(today.getTime() - (365 * oneDay));
@@ -102,13 +117,14 @@ public class CalendarView implements Serializable {
         tmp.set(Calendar.MINUTE, 0);
         tmp.set(Calendar.SECOND, 0);
         tmp.set(Calendar.MILLISECOND, 0);
-        maxTime =  tmp.getTime();
+        maxTime = tmp.getTime();
 
         minDateTime = new Date(today.getTime() - (7 * oneDay));
         maxDateTime = new Date(today.getTime() + (7 * oneDay));
 
         dateDe = GregorianCalendar.getInstance().getTime();
         dateTimeDe = GregorianCalendar.getInstance().getTime();
+        dateTimeMillis = GregorianCalendar.getInstance().getTime();
     }
 
     public void onDateSelect(SelectEvent<Date> event) {
@@ -242,6 +258,14 @@ public class CalendarView implements Serializable {
         this.date14 = date14;
     }
 
+    public Date getDate17() {
+        return date17;
+    }
+
+    public void setDate17(Date date17) {
+        this.date17 = date17;
+    }
+
     public List<Date> getMulti() {
         return multi;
     }
@@ -264,6 +288,14 @@ public class CalendarView implements Serializable {
 
     public void setInvalidDates(List<Date> invalidDates) {
         this.invalidDates = invalidDates;
+    }
+
+    public List<Date> getValidDates() {
+        return validDates;
+    }
+
+    public void setValidDates(List<Date> validDates) {
+        this.validDates = validDates;
     }
 
     public List<Integer> getInvalidDays() {
@@ -304,6 +336,14 @@ public class CalendarView implements Serializable {
 
     public void setDateDe(Date dateDe) {
         this.dateDe = dateDe;
+    }
+
+    public Date getDateTimeMillis() {
+        return dateTimeMillis;
+    }
+
+    public void setDateTimeMillis(Date dateTimeMillis) {
+        this.dateTimeMillis = dateTimeMillis;
     }
 
     public Date getDate15() {

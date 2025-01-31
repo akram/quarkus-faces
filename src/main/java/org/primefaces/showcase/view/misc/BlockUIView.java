@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,27 +23,29 @@
  */
 package org.primefaces.showcase.view.misc;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.util.List;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.showcase.domain.Customer;
 import org.primefaces.showcase.service.CustomerService;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.List;
-
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class BlockUIView {
-    
-    private String firstname;
-    private String lastname;
-    private List<Customer> customers;
 
     @Inject
     CustomerService service;
+
+    private String firstname;
+    private String lastname;
+    private List<Customer> customers;
 
     @PostConstruct
     public void init() {
@@ -65,10 +67,10 @@ public class BlockUIView {
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
-    
+
     public void save() {
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("You've registered"));
-	}
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("You've registered"));
+    }
 
     public void setService(CustomerService service) {
         this.service = service;

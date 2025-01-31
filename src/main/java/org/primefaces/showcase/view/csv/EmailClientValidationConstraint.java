@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,13 @@
  */
 package org.primefaces.showcase.view.csv;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.validate.bean.AbstractClientValidationConstraint;
 
 /**
  * ClientValidationConstraint for @Email annotation
  */
+@RegisterForReflection
 public class EmailClientValidationConstraint extends AbstractClientValidationConstraint {
 
     public static final String MESSAGE_METADATA = "data-p-email-msg";
@@ -36,9 +38,9 @@ public class EmailClientValidationConstraint extends AbstractClientValidationCon
         super(null, MESSAGE_METADATA);
     }
 
+    @Override
     public String getValidatorId() {
         return Email.class.getSimpleName();
     }
-    
-}
 
+}

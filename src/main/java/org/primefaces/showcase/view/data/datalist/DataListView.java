@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,34 +23,32 @@
  */
 package org.primefaces.showcase.view.data.datalist;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import java.io.Serializable;
+import java.util.List;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.PrimeFaces;
 import org.primefaces.showcase.domain.Product;
 import org.primefaces.showcase.service.ProductService;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.Serializable;
-import java.util.List;
-
 @Named
 @SessionScoped
+@RegisterForReflection(serialization = true)
 public class DataListView implements Serializable {
-    
-    private List<Product> products1;
-    
-    private List<Product> products2;
-    
-    private List<Product> products3;
-    
-    private Product selectedProduct;
-    
+
     @Inject
     ProductService service;
-    
+    private List<Product> products1;
+    private List<Product> products2;
+    private List<Product> products3;
+    private Product selectedProduct;
+
     @PostConstruct
     public void init() {
         products1 = service.getProducts(10);
@@ -68,7 +66,7 @@ public class DataListView implements Serializable {
 
     public List<Product> getProducts3() {
         return products3;
-    }    
+    }
 
     public void setService(ProductService service) {
         this.service = service;

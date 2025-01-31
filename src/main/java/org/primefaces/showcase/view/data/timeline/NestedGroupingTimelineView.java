@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,27 +23,31 @@
  */
 package org.primefaces.showcase.view.data.timeline;
 
-import org.primefaces.model.timeline.TimelineGroup;
-import org.primefaces.showcase.domain.Order;
-import org.primefaces.event.timeline.*;
-import org.primefaces.model.timeline.TimelineEvent;
-import org.primefaces.model.timeline.TimelineModel;
-
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
+import jakarta.annotation.PostConstruct;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Named;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.PrimeFaces;
 import org.primefaces.component.timeline.TimelineUpdater;
+import org.primefaces.event.timeline.TimelineModificationEvent;
+import org.primefaces.model.timeline.TimelineEvent;
+import org.primefaces.model.timeline.TimelineGroup;
+import org.primefaces.model.timeline.TimelineModel;
+import org.primefaces.showcase.domain.Order;
 
 @Named("nestedGroupingTimelineView")
 @ViewScoped
+@RegisterForReflection(serialization = true)
 public class NestedGroupingTimelineView implements Serializable {
 
     private TimelineModel<Order, String> model;
@@ -57,16 +61,19 @@ public class NestedGroupingTimelineView implements Serializable {
         model = new TimelineModel<>();
 
         // create nested groups
-        TimelineGroup<String> group1 = new TimelineGroup<>("groupId1", "Truck Group Level 1", "groupId1", 1, Arrays.asList("groupId2", "id1", "id2", "id5", "id6"));
-        TimelineGroup<String> group2 = new TimelineGroup<>("groupId2", "Truck Group Level 2", "groupId2", 2, Arrays.asList("id3", "id4"));
-        TimelineGroup<String> group3 = new TimelineGroup<>("id1", "Truck 1",2);
-        TimelineGroup<String> group4 = new TimelineGroup<>("id2", "Truck 2",2);
+        TimelineGroup<String> group1 = new TimelineGroup<>("groupId1", "Truck Group Level 1", "groupId1", 1,
+                Arrays.asList("groupId2", "id1", "id2", "id5", "id6"));
+        TimelineGroup<String> group2 = new TimelineGroup<>("groupId2", "Truck Group Level 2", "groupId2", 2,
+                Arrays.asList("id3", "id4"));
+        TimelineGroup<String> group3 = new TimelineGroup<>("id1", "Truck 1", 2);
+        TimelineGroup<String> group4 = new TimelineGroup<>("id2", "Truck 2", 2);
         TimelineGroup<String> group5 = new TimelineGroup<>("id3", "Truck 3", 3);
         TimelineGroup<String> group6 = new TimelineGroup<>("id4", "Truck 4", 3);
         TimelineGroup<String> group7 = new TimelineGroup<>("id5", "Truck 5", 2);
         TimelineGroup<String> group8 = new TimelineGroup<>("id6", "Truck 6", 2);
-        TimelineGroup<String> group9 = new TimelineGroup<>("groupId3", "Truck Group Level 1", "groupId3", 1, Arrays.asList("id7", "id8", "id9"));
-        TimelineGroup<String> group10 = new TimelineGroup<>("id7", "Truck 7",2);
+        TimelineGroup<String> group9 = new TimelineGroup<>("groupId3", "Truck Group Level 1", "groupId3", 1,
+                Arrays.asList("id7", "id8", "id9"));
+        TimelineGroup<String> group10 = new TimelineGroup<>("id7", "Truck 7", 2);
         TimelineGroup<String> group11 = new TimelineGroup<>("id8", "Truck 8", 2);
         TimelineGroup<String> group12 = new TimelineGroup<>("id9", "Truck 9", 2);
 
@@ -154,8 +161,8 @@ public class NestedGroupingTimelineView implements Serializable {
         if (ordersToMerge != null && !ordersToMerge.isEmpty()) {
             model.merge(event, ordersToMerge, TimelineUpdater.getCurrentInstance(":form:timeline"));
         } else {
-            FacesMessage msg =
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Nothing to merge, please choose orders to be merged", null);
+            FacesMessage msg
+                    = new FacesMessage(FacesMessage.SEVERITY_INFO, "Nothing to merge, please choose orders to be merged", null);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
 

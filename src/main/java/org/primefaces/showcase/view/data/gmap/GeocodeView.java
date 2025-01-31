@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright (c) 2009-2021 PrimeTek
+ * Copyright (c) 2009-2024 PrimeTek Informatics
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,48 +23,54 @@
  */
 package org.primefaces.showcase.view.data.gmap;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
+import java.util.List;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.primefaces.event.map.GeocodeEvent;
 import org.primefaces.event.map.ReverseGeocodeEvent;
-import org.primefaces.model.map.*;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-import java.util.List;
+import org.primefaces.model.map.DefaultMapModel;
+import org.primefaces.model.map.GeocodeResult;
+import org.primefaces.model.map.LatLng;
+import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Marker;
 
 @Named
 @RequestScoped
+@RegisterForReflection(serialization = true)
 public class GeocodeView {
-    
+
     private MapModel geoModel;
     private MapModel revGeoModel;
     private String centerGeoMap = "41.850033, -87.6500523";
     private String centerRevGeoMap = "41.850033, -87.6500523";
-    
+
     @PostConstruct
     public void init() {
         geoModel = new DefaultMapModel();
         revGeoModel = new DefaultMapModel();
     }
-    
+
     public void onGeocode(GeocodeEvent event) {
         List<GeocodeResult> results = event.getResults();
-        
+
         if (results != null && !results.isEmpty()) {
             LatLng center = results.get(0).getLatLng();
             centerGeoMap = center.getLat() + "," + center.getLng();
-            
+
             for (int i = 0; i < results.size(); i++) {
                 GeocodeResult result = results.get(i);
                 geoModel.addOverlay(new Marker(result.getLatLng(), result.getAddress()));
             }
         }
     }
-    
+
     public void onReverseGeocode(ReverseGeocodeEvent event) {
         List<String> addresses = event.getAddresses();
         LatLng coord = event.getLatlng();
-        
+
         if (addresses != null && !addresses.isEmpty()) {
             centerRevGeoMap = coord.getLat() + "," + coord.getLng();
             revGeoModel.addOverlay(new Marker(coord, addresses.get(0)));
